@@ -40,6 +40,8 @@
     <ItemGroup>
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Racecar.cs" />
+        <Compile Include="RacetrackParcer.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Racetracks\L-Track.txt" />
