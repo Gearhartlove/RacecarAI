@@ -11,8 +11,8 @@ namespace RacecarAI
         int time = 0;
 
         // X and Y location at current time
-        int xtLocation;
-        int ytLocation;
+        public int xtLocation = 0;
+        public int ytLocation = 0;
 
         // X and Y velocity at current time
         int xtVelocity;
