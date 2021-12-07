@@ -51,8 +51,10 @@
         <Compile Include="ProgramDriver.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Racecar.cs" />
+        <Compile Include="RacecarV2.cs" />
         <Compile Include="Racetrack.cs" />
         <Compile Include="RacetrackParcer.cs" />
+        <Compile Include="Tests\RacecarTests.cs" />
         <Compile Include="Tests\RacetrackTests.cs" />
     </ItemGroup>
     <ItemGroup>
