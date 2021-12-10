@@ -47,10 +47,11 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Archived\Racecar.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="ProgramDriver.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Racecar.cs" />
+        <Compile Include="RacecarRules.cs" />
         <Compile Include="RacecarV2.cs" />
         <Compile Include="Racetrack.cs" />
         <Compile Include="RacetrackParcer.cs" />

@@ -4,10 +4,12 @@ using System.Xml;
 namespace RacecarAI {
     public class Racetrack {
         TrackComponent[,] racetrack = null;
-        private Racecar racecar = new Racecar();
-        public Racecar GetRacecar => racecar;
+        private RacecarV2 racecar = new RacecarV2();
+        public RacecarV2 GetRacecar => racecar;
         private int x = 0; // initialize track to size 0
         private int y = 0; // initialize track to size 0
+        private int timestep = 0;
+        public int GetTimestep => timestep;
         
         // indexer to make Racetrack API more accessible
         public TrackComponent this[int indexY, int indexX] {
@@ -57,9 +59,10 @@ namespace RacecarAI {
         // Print out the track
         public override string ToString() {
             string o = "";
+            o += "Timestep: " + GetTimestep + "\n";
             for (int row = 0; row < y; row++) {
                 for (int column = 0; column < x; column++) {
-                    if (racecar.GetPosition().Item1 == column && racecar.GetPosition().Item2 == row) {
+                    if (racecar.GetXPos() == column && racecar.GetYPos() == row) {
                         o += "\u2588";
                     } else {
                         switch (this[row, column]) {
@@ -81,9 +84,10 @@ namespace RacecarAI {
                         }
                     }
                 }
-
                 o += "\n";
             }
+            o += racecar.ToString();
+            o += "--------------------------------------------------";
             return o;
         }
     }

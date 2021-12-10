@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RacecarAI
 {
-    public class Racecar
+    public class Archived_Racecar
     {
         // Random class for implementing randomness
         Random random = new Random();
@@ -21,10 +21,6 @@ namespace RacecarAI
         // X and Y acceleration at current time
         int accelerationX;
         int accelerationY;
-
-        public Racecar()
-        {
-        }
 
         public void TimeStep(int _xAcceleration, int _yAcceleration)
         {
