@@ -4,7 +4,9 @@ namespace RacecarAI {
     class Program {
         static void Main(string[] args) {
             ProgramDriver driver = new ProgramDriver();
-            driver.RunProgram();
+            driver.DebugRunProgram();
+            //driver.RunProgram();
+            
         }
     }
 }

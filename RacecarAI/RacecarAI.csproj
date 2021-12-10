@@ -61,6 +61,7 @@
         <Compile Include="ValueIteration.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="Racetracks\Debug-Track.txt" />
       <Content Include="Racetracks\L-Track.txt" />
       <Content Include="Racetracks\O-Track.txt" />
       <Content Include="Racetracks\R-Track.txt" />
