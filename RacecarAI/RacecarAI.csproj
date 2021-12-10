@@ -55,8 +55,10 @@
         <Compile Include="RacecarV2.cs" />
         <Compile Include="Racetrack.cs" />
         <Compile Include="RacetrackParcer.cs" />
+        <Compile Include="Sarsa.cs" />
         <Compile Include="Tests\RacecarTests.cs" />
         <Compile Include="Tests\RacetrackTests.cs" />
+        <Compile Include="ValueIteration.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Racetracks\L-Track.txt" />
