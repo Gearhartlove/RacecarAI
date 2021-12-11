@@ -3,9 +3,8 @@ using System.Xml;
 
 namespace RacecarAI {
     public class Racetrack {
-        TrackComponent[,] racetrack = null;
-        private RacecarV2 racecar = new RacecarV2();
-        public RacecarV2 GetRacecar => racecar;
+        TrackComponent[,] racetrack;
+        
         private int x = 0; // initialize track to size 0
         private int y = 0; // initialize track to size 0
         private int timestep = 0;
@@ -55,9 +54,8 @@ namespace RacecarAI {
             }
             else Console.WriteLine("Size is already assigned, cannot reassign");
         }
-        
-        // Print out the track
-        public override string ToString() {
+
+        public string getDisplay(Racecar racecar) {
             string o = "";
             o += "Timestep: " + GetTimestep + "\n";
             for (int row = 0; row < y; row++) {

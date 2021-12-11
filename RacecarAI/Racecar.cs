@@ -2,9 +2,11 @@ using System;
 using System.Net;
 
 namespace RacecarAI {
-    public class RacecarV2 {
+    public class Racecar {
 
-        private RacecarRules rules;
+        private const int MAX_SPEED = 5;
+        private const int MAX_ACCEL = 1;
+        
         // Read-Only Stats
         private int x_vel = 0;
         private int y_vel = 0;
@@ -20,8 +22,13 @@ namespace RacecarAI {
         public int GetXPos() => x_pos;
         public int GetYPos() => y_pos;
 
-        public RacecarV2() {
-            rules = new RacecarRules(this);
+        public Racecar(int posX, int posY, int velX, int velY, int accelX, int accelY) {
+            x_pos = posX;
+            y_pos = posY;
+            x_vel = Clamp(velX, -MAX_SPEED, MAX_SPEED);
+            y_vel = Clamp(velY, -MAX_SPEED, MAX_SPEED);
+            x_accel = Clamp(accelX, -MAX_ACCEL, MAX_ACCEL);
+            y_accel = Clamp(accelY, -MAX_ACCEL, MAX_ACCEL);
         }
 
         public override string ToString() {
@@ -31,6 +38,12 @@ namespace RacecarAI {
             o += "Velocity:       " + x_vel + " " + y_vel + "\n";
             o += "Acceleration:   " + x_accel + " " + y_accel + "\n";
             return o;
+        }
+        
+        private int Clamp(int value, int min, int max) {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
         }
 
         // private int vel_x = 0;

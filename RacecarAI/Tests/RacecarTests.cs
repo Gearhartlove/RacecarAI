@@ -8,11 +8,11 @@ namespace RacecarAI.Tests {
         public class TestRacecar {
             
             // initialize each of these for each test performed
-            private RacecarV2 racecar;
+            private Racecar racecar;
 
             [TestInitialize]
             public void TestInitialize() {
-                racecar = new RacecarV2();
+                racecar = new Racecar(0, 0, 0, 0, 0, 0);
             }
 
             [TestMethod]
