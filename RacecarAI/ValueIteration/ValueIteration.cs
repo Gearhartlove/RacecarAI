@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace RacecarAI {
     
@@ -45,11 +46,20 @@ namespace RacecarAI {
                     // If not a wall or a finish line, continue
                     if (oldU.GetFunction[i].Length > 1) {
                         // go through each of the states for each cell and perform a Bellman equation on them
+                        // TODO: Fix problem where the utility of the walls and the finish line are trying to be updated
                         for (int j = 0; j < oldU.GetFunction[i].Length; j++) {
-                            newU.GetFunction[i][j].UpdateUtility(MaxUtility(
-                                QValue(racetrack, oldU,j,i,gamma)));
-                            if (newU.GetFunction[i][j].GetUtility - oldU.GetFunction[i][j].GetUtility > max_change) {
-                                max_change = newU.GetFunction[i][j].GetUtility - oldU.GetFunction[i][j].GetUtility;
+                            // Don't update the walls and the finish line utility
+                            // only update the start and the track cells on the Racetrack
+                            // considered state
+                            State cs = newU.GetFunction[i][j];
+                            // Q value is returning the same value always, not updating properly
+                            if (racetrack[cs.GetYPos, cs.GetXPos] != TrackComponent.Wall || racetrack[cs.GetYPos, cs.GetXPos] != TrackComponent.Finish) {
+                                newU.GetFunction[i][j].UpdateUtility(MaxUtility(
+                                    QValue(racetrack, oldU,j,i,gamma)));
+                                if (newU.GetFunction[i][j].GetUtility - oldU.GetFunction[i][j].GetUtility >
+                                    max_change) {
+                                    max_change = newU.GetFunction[i][j].GetUtility - oldU.GetFunction[i][j].GetUtility;
+                                }
                             }
                         }
                     }
@@ -59,13 +69,6 @@ namespace RacecarAI {
         }
 
         // Returns the utility value for calculating the bellman equation
-        // actions adressed by the transition function: 
-        //      change in acceleration : 
-        //           0  0
-        //          -1  0
-        //           1  0
-        //           0 -1
-        //           0  1
         public List<double> QValue(Racetrack racetrack, UtilityFunction U, int x, int y, double gamma) {
             List<double> utilities = new List<double>();
             // reference to the states below
@@ -91,10 +94,15 @@ namespace RacecarAI {
                 }
                 else {
                     // 80% chance to do what I want and a 20% chance to ignore the desired action
-                    double new_util = (success * (r + gamma * U[x, y, next_x_vel, next_y_vel].GetUtility)) +
-                                      (failiure * (r + gamma * U[x, y, next_x_vel-action[0], next_y_vel-action[1]].GetUtility));
-                    Console.WriteLine("New util: " + new_util);
-                    utilities.Add(new_util);
+                    double Dcurrent_util = U[x, y, next_x_vel, next_y_vel].GetUtility;
+                    double DFuturecurrent_util = U[x, y, next_x_vel+action[0], next_y_vel].GetUtility+action[1];
+                    //Console.WriteLine("succes: " + success * (r + gamma * U[x, y, next_x_vel, next_y_vel].GetUtility));
+                    Console.WriteLine("failiure: " + failiure *
+                        (r + gamma * U[x+next_x_vel, y+next_y_vel, next_x_vel, next_y_vel].GetUtility));
+                    //double new_util = (success * (r + gamma * U[x, y, next_x_vel, next_y_vel].GetUtility)) +
+                    //                 (failiure * (r + gamma * U[x, y, next_x_vel-action[0], next_y_vel-action[1]].GetUtility));
+                    //Console.WriteLine("New util: " + new_util);
+                    utilities.Add(0.0);
                 }
             }
             

@@ -1,7 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7095fd0e_002De001_002D43b5_002D905b_002Df23d24a23d82/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Valid_L_Racetrack" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;MSTest::9FBE0B3D-0A2B-406D-A06B-FBDA73BD7746::.NETFramework,Version=v4.8::RacecarAI.Tests.RacetrackTests.TestRacetrack&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::9FBE0B3D-0A2B-406D-A06B-FBDA73BD7746::.NETFramework,Version=v4.8::RacecarAI.Tests.RacecarTests.TestRacecar.Invalid_X_Velocity&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7095fd0e_002De001_002D43b5_002D905b_002Df23d24a23d82/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Valid_L_Racetrack" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::9FBE0B3D-0A2B-406D-A06B-FBDA73BD7746::.NETFramework,Version=v4.8::RacecarAI.Tests.RacetrackTests.TestRacetrack&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::9FBE0B3D-0A2B-406D-A06B-FBDA73BD7746::.NETFramework,Version=v4.8::RacecarAI.Tests.RacecarTests.TestRacecar.Invalid_X_Velocity&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

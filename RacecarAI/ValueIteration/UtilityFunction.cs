@@ -20,13 +20,18 @@ namespace RacecarAI {
             get { return function[i + j * row_count]; }
         }
 
-        public State this[int i, int j, int x_vel, int y_vel] {
+        public State this[int j, int i, int x_vel, int y_vel] {
             get {
-                foreach (State s in function[i + j * row_count]) {
-                        if (s.GetXVel == x_vel && s.GetYVel == y_vel) {
-                            return s;
-                        }
+                // TODO : i or j ?? order ??
+                if (function[i + j * row_count][0].GetUtility == 1) return function[j][i];
+                if (function[i + j * row_count][0].GetUtility == -1) return function[j][i];
+                foreach (State s in function[i + j * row_count]) { 
+                    //Console.WriteLine(s.GetXVel + " " + s.GetYVel);
+                    if (s.GetXVel == x_vel && s.GetYVel == y_vel) {
+                        return s;
                     }
+                }
+
                 throw new Exception("No matching velocity found");
             }
         }
