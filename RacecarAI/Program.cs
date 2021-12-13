@@ -4,9 +4,7 @@ using System.Collections.Generic;
 namespace RacecarAI {
     class Program {
         static void Main(string[] args) {
-            //TODO Make a Logger class for better Debuging
-            //
-            
+
             QLearningAgent agent = new QLearningAgent();
             Racetrack racetrack = new RacetrackParcer().Parse("Debug-Track");
             
