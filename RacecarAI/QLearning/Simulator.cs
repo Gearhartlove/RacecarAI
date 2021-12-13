@@ -9,8 +9,8 @@ namespace RacecarAI {
 		public Tuple<Racecar, SimulationResult> simulateStep(Racecar car, Racetrack track, int accelDeltaX, int accelDeltaY) {
 			steps++;
 			
-			var newAccelX = car.GetXAccel() + accelDeltaX;
-			var newAccelY = car.GetYAccel() + accelDeltaY;
+			var newAccelX = accelDeltaX;
+			var newAccelY = accelDeltaY;
 			
 			var ignoreAccel = Util.rollRange(20);
 
@@ -40,21 +40,21 @@ namespace RacecarAI {
 		public Tuple<Racecar, SimulationResult> simulateStep(Racecar car, Racetrack track, TrialAction action) {
 			switch (action) {
 				case TrialAction.ACCEL_NORTH:
-					return simulateStep(car, track, 0, 1);
+					return simulateStep(car, track, 0, -1);
 				case TrialAction.ACCEL_NORTHEAST:
-					return simulateStep(car, track, 1, 1);
+					return simulateStep(car, track, 1, -1);
 				case TrialAction.ACCEL_EAST:
 					return simulateStep(car, track, 1, 0);
 				case TrialAction.ACCEL_SOUTHEAST:
-					return simulateStep(car, track, 1, -1);
+					return simulateStep(car, track, 1, 1);
 				case TrialAction.ACCEL_SOUTH:
-					return simulateStep(car, track, 0, -1);
+					return simulateStep(car, track, 0, 1);
 				case TrialAction.ACCEL_SOUTHWEST:
-					return simulateStep(car, track, -1, -1);
+					return simulateStep(car, track, -1, 1);
 				case TrialAction.ACCEL_WEST:
 					return simulateStep(car, track, -1, 0);
 				case TrialAction.ACCEL_NORTHWEST:
-					return simulateStep(car, track, -1, 1);
+					return simulateStep(car, track, -1, -1);
 				case TrialAction.NO_ACCEL:
 					return simulateStep(car, track, 0, 0);
 			}

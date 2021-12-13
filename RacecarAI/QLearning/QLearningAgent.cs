@@ -8,7 +8,8 @@ namespace RacecarAI {
 		private QTable qTable = new QTable();
 		private Dictionary<StateActionPair, int> frequency = new Dictionary<StateActionPair, int>();
 		private const double learningRate = 0.1;
-		private const double discountRate = 1;
+		private const double discountRate = 0.1;
+		private const double T = 1.2;
 
 		public void run(int numberOfTrials, Racetrack racetrack) {
 			int numberOfFailures = 0;
@@ -17,6 +18,7 @@ namespace RacecarAI {
 			var state = racetrack.rollRandomStartCar();
 			
 			for (int i = 0; i < numberOfTrials; i++) {
+				Console.WriteLine("Iteration " + i + " Start!");
 				var result = runOneTrial(racetrack, state);
 
 				switch (result) {
@@ -29,6 +31,7 @@ namespace RacecarAI {
 				}
 				
 				Console.WriteLine("Iteration " + i + " ended with result " + result);
+				Console.WriteLine();
 			}
 			
 			Console.WriteLine("Number of Successes: " + numberOfSuccesses +" | Number of Failures: " + numberOfFailures);
@@ -40,38 +43,38 @@ namespace RacecarAI {
 
 			Tuple<Racecar, SimulationResult> result;
 			do {
-				Console.WriteLine("Step " + simulator.getStepsTaken());
-				Console.WriteLine("------------------");
+				Console.WriteLine("  Step " + simulator.getStepsTaken());
+				Console.WriteLine("    Last State: " + "{Position: (" + lastState.GetXPos() + ", " + lastState.GetYPos() + "); Velocity:(" + lastState.GetXVel() +", " + lastState.GetYVel() + ")}");
 				
 				var action = calculatePolicy(lastState);
-				Console.WriteLine("Action Chosen: " + action);
+				Console.WriteLine("    Action Chosen: " + action);
 				result = simulator.simulateStep(lastState, racetrack, action);
 				var reward = calculateReward(result.Item2);
 				var newQValue = qTable.getValue(lastState, action) + learningRate *
 				                (reward + (discountRate * maxQValueForState(result.Item1)) - qTable.getValue(lastState, action));
+				Console.WriteLine("    New Q value for {Position: (" + lastState.GetXPos() + ", " + lastState.GetYPos() + "); Velocity:(" + lastState.GetXVel() +", " + lastState.GetYVel() + "); " + action + "}");
+				Console.WriteLine("    New Value: " + newQValue + " | Old Value: " + qTable.getValue(lastState, action));
 				qTable.setValue(lastState, action, newQValue);
 				lastState = result.Item1;
-				
-				Console.WriteLine("New Q value for(" + ": " + newQValue);
 			} while (result.Item2 == SimulationResult.CONTINUE);
 
-			Console.WriteLine("Steps Taken: " + simulator.getStepsTaken());
-			Console.WriteLine(racetrack.getDisplay(lastState));
-			Console.WriteLine();
+			//Console.WriteLine("Steps Taken: " + simulator.getStepsTaken());
+			//Console.WriteLine(racetrack.getDisplay(lastState));
+			//Console.WriteLine();
 			
 			return result.Item2;
 		}
 		
 		private TrialAction calculatePolicy(Racecar racecar) {
-			double accelNorthDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_NORTH));
-			double accelNorthWestDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_NORTHWEST));
-			double accelWestDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_WEST));
-			double accelSouthWestDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_SOUTHWEST));
-			double accelSouthDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_SOUTH));
-			double accelSouthEastDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_SOUTHEAST));
-			double accelEastDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_EAST));
-			double accelNorthEastDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_NORTHEAST));
-			double noAccelDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.NO_ACCEL));
+			double accelNorthDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_NORTH)/T);
+			double accelNorthWestDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_NORTHWEST)/T);
+			double accelWestDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_WEST)/T);
+			double accelSouthWestDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_SOUTHWEST)/T);
+			double accelSouthDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_SOUTH)/T);
+			double accelSouthEastDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_SOUTHEAST)/T);
+			double accelEastDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_EAST)/T);
+			double accelNorthEastDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_NORTHEAST)/T);
+			double noAccelDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.NO_ACCEL)/T);
 
 			double denominator = accelNorthDen +
 			                     accelNorthWestDen +
@@ -85,11 +88,10 @@ namespace RacecarAI {
 
 			var roller = new ProbabilityTable<TrialAction>();
 			
-			Console.WriteLine("Action Probabilities:");
-			Console.WriteLine("  (Action, Prob)");
+			Console.WriteLine("    Action Probabilities:");
 			foreach (TrialAction action in Enum.GetValues(typeof(TrialAction))) {
-				var actionProbability = Math.Pow(Math.E, qTable.getValue(racecar, action)) / denominator;
-				Console.WriteLine("  (" + action + ", " + actionProbability + ")");
+				var actionProbability = Math.Pow(Math.E, qTable.getValue(racecar, action)/T) / denominator;
+				Console.WriteLine("      (" + action + ", " + actionProbability + ")");
 				roller.add(action, actionProbability);
 			}
 

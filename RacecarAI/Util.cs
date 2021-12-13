@@ -8,7 +8,7 @@ namespace RacecarAI {
 		
 		public static int rollRange(int percentFailure) {
 			float roll = rand.Next(0, 100);
-			if (roll <= percentFailure) return 1;
+			if (roll >= percentFailure) return 1;
 			return 0;
 		}
 		

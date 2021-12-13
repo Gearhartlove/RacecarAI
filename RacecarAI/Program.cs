@@ -8,9 +8,11 @@ namespace RacecarAI {
             //
             
             QLearningAgent agent = new QLearningAgent();
-            Racetrack racetrack = new RacetrackParcer().Parse("L-Track");
+            Racetrack racetrack = new RacetrackParcer().Parse("Debug-Track");
             
-            agent.run(5, racetrack);
+            agent.run(100000, racetrack);
+
+            
 
 //            Racecar racecar1 = new Racecar(0, 0, 0, 0, 0, 0);
 //            Racecar racecar2 = new Racecar(0,0,0,0,0,0);
