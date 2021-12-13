@@ -8,14 +8,16 @@ namespace RacecarAI {
 		private QTable qTable = new QTable();
 		private Dictionary<StateActionPair, int> frequency = new Dictionary<StateActionPair, int>();
 		private const double learningRate = 0.1;
-		private const double discountRate = 0.04;
+		private const double discountRate = 1;
 
 		public void run(int numberOfTrials, Racetrack racetrack) {
 			int numberOfFailures = 0;
 			int numberOfSuccesses = 0;
+
+			var state = racetrack.rollRandomStartCar();
 			
 			for (int i = 0; i < numberOfTrials; i++) {
-				var result = runOneTrial(racetrack);
+				var result = runOneTrial(racetrack, state);
 
 				switch (result) {
 					case SimulationResult.CRASH:
@@ -32,22 +34,30 @@ namespace RacecarAI {
 			Console.WriteLine("Number of Successes: " + numberOfSuccesses +" | Number of Failures: " + numberOfFailures);
 		}
 		
-		public SimulationResult runOneTrial(Racetrack racetrack) {
+		public SimulationResult runOneTrial(Racetrack racetrack, Racecar start) {
 			simulator.resetSteps();
-			var lastState = racetrack.rollRandomStartCar();
+			var lastState = start;
 
 			Tuple<Racecar, SimulationResult> result;
 			do {
+				Console.WriteLine("Step " + simulator.getStepsTaken());
+				Console.WriteLine("------------------");
+				
 				var action = calculatePolicy(lastState);
+				Console.WriteLine("Action Chosen: " + action);
 				result = simulator.simulateStep(lastState, racetrack, action);
 				var reward = calculateReward(result.Item2);
 				var newQValue = qTable.getValue(lastState, action) + learningRate *
 				                (reward + (discountRate * maxQValueForState(result.Item1)) - qTable.getValue(lastState, action));
 				qTable.setValue(lastState, action, newQValue);
 				lastState = result.Item1;
+				
+				Console.WriteLine("New Q value for(" + ": " + newQValue);
 			} while (result.Item2 == SimulationResult.CONTINUE);
 
+			Console.WriteLine("Steps Taken: " + simulator.getStepsTaken());
 			Console.WriteLine(racetrack.getDisplay(lastState));
+			Console.WriteLine();
 			
 			return result.Item2;
 		}
@@ -74,8 +84,13 @@ namespace RacecarAI {
 			                     noAccelDen;
 
 			var roller = new ProbabilityTable<TrialAction>();
+			
+			Console.WriteLine("Action Probabilities:");
+			Console.WriteLine("  (Action, Prob)");
 			foreach (TrialAction action in Enum.GetValues(typeof(TrialAction))) {
-				roller.add(action, Math.Pow(Math.E, qTable.getValue(racecar, action)) / denominator);
+				var actionProbability = Math.Pow(Math.E, qTable.getValue(racecar, action)) / denominator;
+				Console.WriteLine("  (" + action + ", " + actionProbability + ")");
+				roller.add(action, actionProbability);
 			}
 
 			return roller.roll();
@@ -153,6 +168,14 @@ namespace RacecarAI {
 			this.action = action;
 		}
 
+		public static bool operator ==(StateActionPair sap1, StateActionPair sap2) {
+			return sap1.Equals(sap2);
+		}
+        
+		public static bool operator !=(StateActionPair sap1, StateActionPair sap2) {
+			return !sap1.Equals(sap2);
+		}
+		
 		public override bool Equals(object obj) {
 			if (obj is StateActionPair) {
 				var other = (StateActionPair) obj;
@@ -160,6 +183,10 @@ namespace RacecarAI {
 			}
 			
 			return base.Equals(obj);
+		}
+
+		public override int GetHashCode() {
+			return state.GetHashCode() ^ action.GetHashCode();
 		}
 
 		public override string ToString() {

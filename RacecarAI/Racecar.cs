@@ -12,8 +12,8 @@ namespace RacecarAI {
         private int y_vel = 0;
         private int x_accel = 0;
         private int y_accel = 0;
-        private int x_pos = -1;
-        private int y_pos = -1;
+        private int x_pos = 0;
+        private int y_pos = 0;
 
         public int GetXVel() => x_vel;
         public int GetYVel() => y_vel;
@@ -40,6 +40,14 @@ namespace RacecarAI {
             return o;
         }
 
+        public static bool operator ==(Racecar racecar1, Racecar racecar2) {
+            return racecar1.Equals(racecar2);
+        }
+        
+        public static bool operator !=(Racecar racecar1, Racecar racecar2) {
+            return !racecar1.Equals(racecar2);
+        }
+        
         public override bool Equals(object obj) {
             if (obj is Racecar) {
                 var other = (Racecar) obj;
@@ -52,6 +60,15 @@ namespace RacecarAI {
             }
             
             return base.Equals(obj);
+        }
+
+        public override int GetHashCode() {
+            return x_pos.GetHashCode() ^
+                   y_pos.GetHashCode() ^
+                   x_vel.GetHashCode() ^
+                   y_vel.GetHashCode() ^
+                   x_accel.GetHashCode() ^
+                   y_accel.GetHashCode();
         }
 
         // private int vel_x = 0;
