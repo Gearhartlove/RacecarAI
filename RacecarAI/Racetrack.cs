@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 
 namespace RacecarAI {
     public class Racetrack {
         TrackComponent[,] racetrack;
+        
+        private List<Tuple<int, int>> startPositions = new List<Tuple<int, int>>();
         
         private int x = 0; // initialize track to size 0
         private int y = 0; // initialize track to size 0
@@ -53,6 +56,14 @@ namespace RacecarAI {
                 racetrack = new TrackComponent[y, x];
             }
             else Console.WriteLine("Size is already assigned, cannot reassign");
+        }
+
+        public void addStartPos(int x, int y) {
+            startPositions.Add(new Tuple<int, int>(x, y));
+        }
+
+        public Tuple<int, int>[] getStartPosistions() {
+            return startPositions.ToArray();
         }
 
         public string getDisplay(Racecar racecar) {

@@ -14,6 +14,7 @@ namespace RacecarAI {
 			
 			Tuple<Racecar, SimulationResult> result;
 //			do {
+//				var action = calculatePolicy();
 //				result = simulator.simulateStep()
 //			} while (result.Item2 != SimulationResult.CRASH);
 		}
@@ -41,14 +42,10 @@ namespace RacecarAI {
 
 			var roller = new ProbabilityTable<TrialAction>();
 			foreach (TrialAction action in Enum.GetValues(typeof(TrialAction))) {
-				roller.add(action, calculateActionProbability(racecar, action, denominator));
+				roller.add(action, Math.Pow(Math.E, qTable.getValue(racecar, action)) / denominator);
 			}
 
 			return roller.roll();
-		}
-
-		private double calculateActionProbability(Racecar racecar, TrialAction action, double denominator) {
-			return Math.Pow(Math.E, qTable.getValue(racecar, action)) / denominator;
 		}
 		
 		//private Tuple<int, int> getValueFromAction()
