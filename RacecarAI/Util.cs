@@ -12,12 +12,20 @@ namespace RacecarAI {
 			return 0;
 		}
 		
+		public static int Clamp(int value, int min, int max) {
+			if (value < min) return min;
+			if (value > max) return max;
+			return value;
+		}
+		
 	}
 
 	public class ProbabilityTable<T> {
 		private List<double> probabilities = new List<double>();
 		private List<T> data = new List<T>();
 		private double sum = 0;
+
+		public T[] Data => data.ToArray();
 
 		public void add(T value, double probability) {
 			probabilities.Add(probability);

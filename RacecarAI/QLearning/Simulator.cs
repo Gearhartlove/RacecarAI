@@ -20,7 +20,7 @@ namespace RacecarAI {
 			var newPosX = car.GetXPos() + newSpeedX;
 			var newPosY = car.GetYPos() + newSpeedY;
 			
-			var nextLocation = track[newPosX, newPosY];
+			var nextLocation = track[newPosY, newPosX];
 
 			var newRacecar = new Racecar(newPosX, newPosY, newSpeedX, newSpeedY, newAccelX, newAccelY);
 			
@@ -35,6 +35,31 @@ namespace RacecarAI {
 			}
 
 			throw new Exception("Racetrack value should not be set to initial");
+		}
+
+		public Tuple<Racecar, SimulationResult> simulateStep(Racecar car, Racetrack track, TrialAction action) {
+			switch (action) {
+				case TrialAction.ACCEL_NORTH:
+					return simulateStep(car, track, 0, 1);
+				case TrialAction.ACCEL_NORTHEAST:
+					return simulateStep(car, track, 1, 1);
+				case TrialAction.ACCEL_EAST:
+					return simulateStep(car, track, 1, 0);
+				case TrialAction.ACCEL_SOUTHEAST:
+					return simulateStep(car, track, 1, -1);
+				case TrialAction.ACCEL_SOUTH:
+					return simulateStep(car, track, 0, -1);
+				case TrialAction.ACCEL_SOUTHWEST:
+					return simulateStep(car, track, -1, -1);
+				case TrialAction.ACCEL_WEST:
+					return simulateStep(car, track, -1, 0);
+				case TrialAction.ACCEL_NORTHWEST:
+					return simulateStep(car, track, -1, 1);
+				case TrialAction.NO_ACCEL:
+					return simulateStep(car, track, 0, 0);
+			}
+			
+			throw new Exception("Not a recognized Action.");
 		}
 
 		public int getStepsTaken() {

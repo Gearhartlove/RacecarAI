@@ -3,15 +3,10 @@
 namespace RacecarAI {
     class Program {
         static void Main(string[] args) {
-            var argMax = new ArgMax<int>();
+            QLearningAgent agent = new QLearningAgent();
+            Racetrack racetrack = new RacetrackParcer().Parse("Debug-Track");
             
-            argMax.insert(10);
-            argMax.insert(12);
-            argMax.insert(13);
-            argMax.insert(11);
-            argMax.insert(9);
-            
-            Console.WriteLine(argMax.Greatest);
+            agent.run(150, racetrack);
         }
     }
 }

@@ -25,10 +25,10 @@ namespace RacecarAI {
         public Racecar(int posX, int posY, int velX, int velY, int accelX, int accelY) {
             x_pos = posX;
             y_pos = posY;
-            x_vel = Clamp(velX, -MAX_SPEED, MAX_SPEED);
-            y_vel = Clamp(velY, -MAX_SPEED, MAX_SPEED);
-            x_accel = Clamp(accelX, -MAX_ACCEL, MAX_ACCEL);
-            y_accel = Clamp(accelY, -MAX_ACCEL, MAX_ACCEL);
+            x_vel = Util.Clamp(velX, -MAX_SPEED, MAX_SPEED);
+            y_vel = Util.Clamp(velY, -MAX_SPEED, MAX_SPEED);
+            x_accel = Util.Clamp(accelX, -MAX_ACCEL, MAX_ACCEL);
+            y_accel = Util.Clamp(accelY, -MAX_ACCEL, MAX_ACCEL);
         }
 
         public override string ToString() {
@@ -52,12 +52,6 @@ namespace RacecarAI {
             }
             
             return base.Equals(obj);
-        }
-
-        private int Clamp(int value, int min, int max) {
-            if (value < min) return min;
-            if (value > max) return max;
-            return value;
         }
 
         // private int vel_x = 0;
