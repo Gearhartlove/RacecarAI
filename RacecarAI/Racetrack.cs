@@ -4,6 +4,8 @@ using System.Xml;
 namespace RacecarAI {
     public class Racetrack {
         TrackComponent[,] racetrack;
+        private Racecar racecar = new Racecar(-1, -1, 0, 0, 0, 0);
+        public Racecar GetRacecar => racecar;
         
         private int x = 0; // initialize track to size 0
         private int y = 0; // initialize track to size 0

@@ -47,7 +47,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Archived\Racecar.cs" />
+        <Compile Include="Archived\Archived_Racecar.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="ProgramDriver.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -58,7 +58,10 @@
         <Compile Include="Simulator.cs" />
         <Compile Include="Tests\RacecarTests.cs" />
         <Compile Include="Tests\RacetrackTests.cs" />
-        <Compile Include="ValueIteration.cs" />
+        <Compile Include="ValueIteration\Action.cs" />
+        <Compile Include="ValueIteration\State.cs" />
+        <Compile Include="ValueIteration\UtilityFunction.cs" />
+        <Compile Include="ValueIteration\ValueIteration.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Racetracks\Debug-Track.txt" />

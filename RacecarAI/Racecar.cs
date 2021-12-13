@@ -5,6 +5,7 @@ namespace RacecarAI {
     public class Racecar {
 
         private const int MAX_SPEED = 5;
+        public int GetMAX_SPEED => MAX_SPEED;
         private const int MAX_ACCEL = 1;
         
         // Read-Only Stats
@@ -29,6 +30,13 @@ namespace RacecarAI {
             y_vel = Clamp(velY, -MAX_SPEED, MAX_SPEED);
             x_accel = Clamp(accelX, -MAX_ACCEL, MAX_ACCEL);
             y_accel = Clamp(accelY, -MAX_ACCEL, MAX_ACCEL);
+        }
+        
+        // actions for the Racecar to make
+        public enum Actions {
+            Nothing,
+            Accelerate,
+            Decelerate,
         }
 
         public override string ToString() {

@@ -14,7 +14,7 @@ namespace RacecarAI {
             Console.WriteLine(debug_track);
             
             // run algorithms
-            vi.Run(debug_track);
+            vi.RunValueIteration(debug_track);
             sarsa.Run(debug_track);
         }
         
@@ -29,9 +29,9 @@ namespace RacecarAI {
             Racetrack o_track = parcer.Parse("O-Track"); 
             
             // run algorithms
-            vi.Run(l_track);
-            vi.Run(r_track);
-            vi.Run(o_track);
+            vi.RunValueIteration(l_track);
+            vi.RunValueIteration(r_track);
+            vi.RunValueIteration(o_track);
             sarsa.Run(l_track);
             sarsa.Run(r_track);
             sarsa.Run(o_track);
