@@ -39,7 +39,21 @@ namespace RacecarAI {
             o += "Acceleration:   " + x_accel + " " + y_accel + "\n";
             return o;
         }
-        
+
+        public override bool Equals(object obj) {
+            if (obj is Racecar) {
+                var other = (Racecar) obj;
+                return x_pos == other.GetXPos() &&
+                       y_pos == other.GetYPos() &&
+                       x_vel == other.GetXVel() &&
+                       y_vel == other.GetYVel() &&
+                       x_accel == other.GetXAccel() &&
+                       y_accel == other.GetYAccel();
+            }
+            
+            return base.Equals(obj);
+        }
+
         private int Clamp(int value, int min, int max) {
             if (value < min) return min;
             if (value > max) return max;

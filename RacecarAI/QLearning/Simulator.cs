@@ -12,8 +12,10 @@ namespace RacecarAI {
 			var newAccelX = car.GetXAccel() + accelDeltaX;
 			var newAccelY = car.GetYAccel() + accelDeltaY;
 			
-			var newSpeedX = car.GetXVel() + newAccelX;
-			var newSpeedY = car.GetYVel() + newAccelY;
+			var ignoreAccel = Util.rollRange(20);
+
+			var newSpeedX = car.GetXVel() + newAccelX * ignoreAccel;
+			var newSpeedY = car.GetYVel() + newAccelY * ignoreAccel;
 
 			var newPosX = car.GetXPos() + newSpeedX;
 			var newPosY = car.GetYPos() + newSpeedY;
