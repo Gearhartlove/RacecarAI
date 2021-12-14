@@ -1,0 +1,22 @@
+﻿Authors : Kristoff Finley, Brooks Palin, Nathaniel Preistley
+
+Kristoff Finley contributions:
+State.cs
+UtilityFunction.cs
+ValueIteration.cs
+Policy.cs
+Program.cs
+ProgramDriver.cs
+Racecar.cs
+Racetrack.cs
+RactrackParcer.cs
+
+Brooks Palin contributions:
+QLearningAgent.cs
+Simulator.cs
+Util.cs
+Racecar.cs
+Racetrack.cs
+
+Nathaniel Preistley contributions:
+Racecar.cs

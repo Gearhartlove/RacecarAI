@@ -65,6 +65,7 @@
         <Compile Include="Util.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="AuthorContribution" />
       <Content Include="Racetracks\Debug-Track.txt" />
       <Content Include="Racetracks\L-Track.txt" />
       <Content Include="Racetracks\O-Track.txt" />
