@@ -6,15 +6,18 @@ using System.Runtime.CompilerServices;
 namespace RacecarAI {
     public class UtilityFunction {
 
+        // UtilityFunction local variables
         public int row_count = 0;
         private State[][] function;
         public State[][] GetFunction => function;
 
+        // Intentional empty constructor used when making a deep copy of UtilityFunction in the Q function for 
+        // Value iteration
         public UtilityFunction() {
             
         }
 
-        // indexer to make API for accesding states simpler
+        // indexer to make API for making accessing states simpler
         public State[] this[int i, int j] {
             get {
                 if (i + j * row_count < 0 || i + j * row_count > function.Length) {
@@ -24,10 +27,16 @@ namespace RacecarAI {
             }
         }
 
+        // indexer used for referencing another state using a state to begin with 
         public State this[State s] {
             get { return function[s.GetNumber][s.GetSubNumber]; }
         }
 
+        /// <summary>
+        /// Constructor used to create a UtilityFunction from a race track; input: racetrack, output: UtilityFunction.
+        /// Goes cell by cell and creates the desired states for the cells, which the car can travel over.
+        /// </summary>
+        /// <param name="racetrack"></param>
         public UtilityFunction(Racetrack racetrack) {
             row_count = racetrack.YTracksize;
             // Get permutations for the racetrack
@@ -65,8 +74,18 @@ namespace RacecarAI {
                 }
             }
         }
-
-        // Called by the Track and Start position states
+        
+        /// <summary>
+        /// Private method used to help set up the states created above (remove what would be repeated code from the
+        /// switch statement above).
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="states"></param>
+        /// <param name="component"></param>
+        /// <param name="num"></param>
+        /// <param name="perms"></param>
+        /// <param name="u"></param>
         private void SetUpState(int x, int y, State[] states, TrackComponent component, int num, List<int[]> perms,
             double u) {
             for (int i = 0; i < states.Length; i++) {
@@ -75,7 +94,13 @@ namespace RacecarAI {
             }
         }
 
-        // Get future state utility
+        /// <summary>
+        /// Gets the future state or s' utility, used in value iteration class while conducting the Q function
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="xVel"></param>
+        /// <param name="yVel"></param>
+        /// <returns></returns>
         public double FutureStateUtility(State s, int xVel, int yVel) {
             int newXVel = 0;
             int newYVel = 0;
@@ -120,9 +145,10 @@ namespace RacecarAI {
         }
 
         /// <summary>
-        /// Create a copy (not reference) of the utility function and return it.
+        /// Creates a deep copy of the UtilityFunction class.
         /// </summary>
         /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public UtilityFunction DeepCopy() {
             if (function == null) {
                 throw new Exception("Can't deep copy a null utility function!");

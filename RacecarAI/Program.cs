@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace RacecarAI {
     class Program {
         static void Main(string[] args) {
-
+            // run the program
             ProgramDriver driver = new ProgramDriver();
             driver.DebugRunProgram();
 

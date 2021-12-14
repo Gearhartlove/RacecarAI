@@ -46,10 +46,22 @@ namespace RacecarAI {
             return racetrack;
         }
 
+        /// <summary>
+        /// Add to the racetrack's start spot List (where the car can spawn)
+        /// </summary>
+        /// <param name="y"></param>
+        /// <param name="x"></param>
         private void AddToStartSpot(int y, int x) {
             racetrack.GetStartSpots.Add(new int[] {x, y});
         }
 
+        /// <summary>
+        /// Assign a specific component to the Racetrack, dictated by the switch statement in the RacetrackParcer
+        /// constructor.
+        /// </summary>
+        /// <param name="y"></param>
+        /// <param name="x"></param>
+        /// <param name="comp"></param>
         private void AssignComponent(int y, int x, TrackComponent comp) {
             racetrack[x, y] = comp;
         }

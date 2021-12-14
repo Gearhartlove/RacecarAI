@@ -5,20 +5,23 @@ using System.Xml;
 namespace RacecarAI {
     
     public class Racetrack {
+        // Local variables used in the Racecar track
         TrackComponent[,] racetrack;
         private Racecar racecar = new Racecar(-1, -1, 0, 0, 0, 0);
         public Racecar GetRacecar => racecar;
-
         public List<int[]> start_spots = new List<int[]>();
         public List<int[]> GetStartSpots => start_spots;
-        
         private ProbabilityTable<Tuple<int, int>> startPositions = new ProbabilityTable<Tuple<int, int>>();
-        
         private int x = 0; // initialize track to size 0
         private int y = 0; // initialize track to size 0
         private int timestep = 0;
         public int GetTimestep => timestep;
         
+        /// <summary>
+        /// Indexer used to easily get the TrackComponent of a certain part of the track.
+        /// </summary>
+        /// <param name="indexX"></param>
+        /// <param name="indexY"></param>
         public TrackComponent this[int indexX, int indexY] {
             get => racetrack[Util.Clamp(indexY, 0, y-1), Util.Clamp(indexX, 0, x-1)];
           
@@ -30,7 +33,9 @@ namespace RacecarAI {
             }
         }
 
-        // Get the number of columns for the track
+        /// <summary>
+        /// Get the number of columns in the track
+        /// </summary>
         public int XTracksize {
             get => x;
             set {
@@ -42,8 +47,10 @@ namespace RacecarAI {
                 }
             }
         }
-
-        // Get number of rows for the track
+        
+        /// <summary>
+        /// Get the number of rows in the track
+        /// </summary>
         public int YTracksize {
             get => y;
             set {
@@ -64,19 +71,37 @@ namespace RacecarAI {
             else Console.WriteLine("Size is already assigned, cannot reassign");
         }
 
+        /// <summary>
+        /// Track the possible starting positions in the Racetrack
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void addStartPos(int x, int y) {
             startPositions.add(new Tuple<int, int>(x, y), 1);
         }
 
+        /// <summary>
+        /// Get the start position data.
+        /// </summary>
+        /// <returns></returns>
         public Tuple<int, int>[] getStartPosistions() {
             return startPositions.Data;
         }
 
+        /// <summary>
+        /// Start the car at a random position;
+        /// </summary>
+        /// <returns></returns>
         public Racecar rollRandomStartCar() {
             var start = startPositions.roll();
             return new Racecar(start.Item1, start.Item2, 0, 0, 0, 0);
         }
 
+        /// <summary>
+        /// Used to print out the racetrack to the console.
+        /// </summary>
+        /// <param name="racecar"></param>
+        /// <returns></returns>
         public string getDisplay(Racecar racecar) {
             string o = "";
             o += "Timestep: " + GetTimestep + "\n";

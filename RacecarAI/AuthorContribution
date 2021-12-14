@@ -10,6 +10,7 @@ ProgramDriver.cs
 Racecar.cs
 Racetrack.cs
 RactrackParcer.cs
+RacetrackTests.cs
 
 Brooks Palin contributions:
 QLearningAgent.cs

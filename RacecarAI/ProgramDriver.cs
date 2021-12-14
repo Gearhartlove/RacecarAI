@@ -29,7 +29,6 @@ namespace RacecarAI {
             Racetrack o_track = parcer.Parse("O-Track"); 
             
             // run algorithms
-
             vi.RunValueIteration(l_track);
             vi.RunValueIteration(r_track);
             vi.RunValueIteration(o_track);

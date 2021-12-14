@@ -57,7 +57,6 @@
         <Compile Include="Racecar.cs" />
         <Compile Include="Racetrack.cs" />
         <Compile Include="RacetrackParcer.cs" />
-        <Compile Include="Tests\RacecarTests.cs" />
         <Compile Include="Tests\RacetrackTests.cs" />
         <Compile Include="ValueIteration\State.cs" />
         <Compile Include="ValueIteration\UtilityFunction.cs" />

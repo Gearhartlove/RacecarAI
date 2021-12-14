@@ -10,6 +10,7 @@ namespace RacecarAI {
     /// </summary>
     public class State {
 
+        // Constructor for State, used when creating a state object
         public State(int x, int y, TrackComponent component, int number, int sub_number, int xVel = Int32.MinValue,
             int yVel = Int32.MaxValue, double util=0) {
             x_pos = x;
@@ -26,6 +27,7 @@ namespace RacecarAI {
             Velocity = new Tuple<int, int>(x_vel, y_vel);
         }
         
+        // local variables used in the state object class
         private int x_pos;
         public int GetXPos => x_pos;
         private int y_pos;
@@ -35,7 +37,7 @@ namespace RacecarAI {
         private int y_vel;
         public int GetYVel => y_vel;
         
-        // better debugging
+        // better debugging tools (no technical usage other than reading in the debug mode)
         public readonly Tuple<int, int> Position;
         public readonly Tuple<int, int> Velocity; 
         

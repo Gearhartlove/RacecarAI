@@ -4,6 +4,8 @@ namespace RacecarAI.Tests {
     
     namespace RacetrackTests {
         
+        // Test suite to test if the racetracks provided in the file imported correctly into the Racetrack custom data
+        // structure
         [TestClass]
         public class TestRacetrack {
             

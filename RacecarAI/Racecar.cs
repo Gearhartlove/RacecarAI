@@ -39,6 +39,10 @@ namespace RacecarAI {
             Decelerate,
         }
 
+        /// <summary>
+        /// ToString() used to print out the racecar stats in conjunction with the board.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() {
             string o = "";
             o += "Racecar Stats (X,Y): \n";
@@ -57,6 +61,13 @@ namespace RacecarAI {
         }
 
 
+        /// <summary>
+        /// Prevents the velocity of the car from being more or less than its bounds (-5 to 5 in this problem's case)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public int Clamp(int value, int min, int max) {
             if (value < min) return min;
             if (value > max) return max;
@@ -86,6 +97,10 @@ namespace RacecarAI {
                    y_accel.GetHashCode();
         }
 
+        /// <summary>
+        /// Spawns the car on the racecar track, according to an x and y value
+        /// </summary>
+        /// <param name="coords"></param>
         public void Spawn(Tuple<int, int> coords) {
             x_pos = coords.Item1;
             y_pos = coords.Item2;

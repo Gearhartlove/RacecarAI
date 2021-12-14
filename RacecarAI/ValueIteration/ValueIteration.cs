@@ -68,7 +68,14 @@ namespace RacecarAI {
             return oldU;
         }
 
-        // Returns the utility value for calculating the bellman equation
+        /// <summary>
+        /// Used in the Bellman equation to calculate the various utility permutations. Creates a list of doubles
+        /// which the max is then picked from.
+        /// </summary>
+        /// <param name="racetrack"></param>
+        /// <param name="U"></param>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public List<double> QValue(Racetrack racetrack, UtilityFunction U, State s) {
             List<double> utilities = new List<double>();
             // reference to the states below
@@ -95,6 +102,10 @@ namespace RacecarAI {
             return utilities;
         }
 
+        /// <summary>
+        /// Gets the various actions the racecar can take (11 different permutations of acceleration values)
+        /// </summary>
+        /// <returns></returns>
         private List<int[]> GetRacecarActions() {
             int[] accel = new int[] {-1, 0, 1};
             List<int[]> actions = new List<int[]>();
@@ -106,6 +117,11 @@ namespace RacecarAI {
             return actions;
         } 
         
+        /// <summary>
+        /// Returns the maximum utility from a list of utilities. Used in conjunction with the Q function.
+        /// </summary>
+        /// <param name="utilities"></param>
+        /// <returns></returns>
         public double MaxUtility(List<double> utilities) {
             double max = -1000;
             for (int i = 0; i < utilities.Count; i++) {
