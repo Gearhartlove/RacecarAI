@@ -112,7 +112,6 @@ namespace RacecarAI {
             for (int i = -range; i < range + 1; i++) {
                 for (int j = -range; j < range + 1; j++) {
                     int[] combination = new[] {i, j};
-                    //Console.WriteLine(i + " " + j);
                     permutations.Add(combination);
                 }
             }

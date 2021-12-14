@@ -48,6 +48,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Archived\Archived_Racecar.cs" />
+        <Compile Include="Policy.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="ProgramDriver.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

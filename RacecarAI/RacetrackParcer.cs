@@ -37,11 +37,16 @@ namespace RacecarAI {
                             break;
                         case 'S':
                             AssignComponent(line, character, TrackComponent.Start); 
+                            AddToStartSpot(line, character); 
                             break;
                     }
                 }
             }
             return racetrack;
+        }
+
+        private void AddToStartSpot(int y, int x) {
+            racetrack.GetStartSpots.Add(new int[] {x, y});
         }
 
         private void AssignComponent(int y, int x, TrackComponent comp) {

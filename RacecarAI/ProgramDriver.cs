@@ -14,8 +14,9 @@ namespace RacecarAI {
             Console.WriteLine(debug_track);
             
             // run algorithms
-            vi.RunValueIteration(debug_track);
-            sarsa.Run(debug_track);
+            UtilityFunction uf = vi.RunValueIteration(debug_track);
+            Policy optimal_policy = new Policy(uf, debug_track);
+            optimal_policy.Run();
         }
         
         public void RunProgram() {

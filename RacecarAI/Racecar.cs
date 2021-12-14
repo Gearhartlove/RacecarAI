@@ -54,6 +54,11 @@ namespace RacecarAI {
             return value;
         }
 
+        public void Spawn(Tuple<int, int> coords) {
+            x_pos = coords.Item1;
+            y_pos = coords.Item2;
+        }
+
         // private int vel_x = 0;
          //
          // public void SetXVelocity(int value) {

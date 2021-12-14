@@ -8,8 +8,8 @@ namespace RacecarAI {
     public class ValueIteration {
         private double success = 0.8;
         private double failiure = 0.2;
-        private double r = -0.07;
-        double gamma = 0.05; // low = lower preference for future
+        private double r = -0.04;
+        double gamma = 0.001; // low = lower preference for future
         
         // maximum relative change int he utility of any state
         public ValueIteration() {
@@ -31,12 +31,17 @@ namespace RacecarAI {
         public UtilityFunction RunValueIteration(Racetrack racetrack) {
             // maximum relative change in the utility of any state
             double max_change = 0; // helps determine when the progranm needs to stop running 
-            double max_error = 0.1; //??
+            double max_error = 0.001; //??
             // data structures for utilities of racetrack, initially zero
             UtilityFunction oldU = new UtilityFunction(racetrack);
             UtilityFunction newU = new UtilityFunction(racetrack);
             // maximum relative change 
+            int count = 0;
             while (max_change <= max_error*((1-gamma)/gamma)) {
+                Console.WriteLine(++count);
+                if (count == 5000) {
+                    return oldU;
+                }
                 oldU = newU.DeepCopy(); // TODO test implementation
                 max_change = 0; // reset
                 // loop through every state
@@ -50,20 +55,17 @@ namespace RacecarAI {
                         if (sub_state.GetComponent != TrackComponent.Wall &&
                             sub_state.GetComponent != TrackComponent.Finish) {
                             // debugging Q function now
-                            Console.WriteLine("New Utility: " + newU[sub_state].GetUtility);
-                            Console.WriteLine("Old Utility: " + oldU[sub_state].GetUtility);
                             newU[sub_state].GetUtility = (MaxUtility(QValue(racetrack, oldU, sub_state)));
-                            Console.WriteLine("New Utility: " + newU[sub_state].GetUtility);
-                            Console.WriteLine("Old Utility: " + oldU[sub_state].GetUtility);
                             //Console.WriteLine(Math.Abs(newU[sub_state].GetUtility - oldU[sub_state].GetUtility));
                             if (Math.Abs(newU[sub_state].GetUtility - oldU[sub_state].GetUtility) > max_change) {
                                 max_change = Math.Abs(newU[sub_state].GetUtility - oldU[sub_state].GetUtility);
-                                Console.WriteLine("max_change is now " + max_change);
+                                Console.WriteLine(max_change);
                             }
                         }
                     }
                 }
             }
+            Console.WriteLine("sauce");
             return oldU;
         }
 
@@ -114,7 +116,6 @@ namespace RacecarAI {
                     max = utilities[i];
                 }
             }
-            Console.WriteLine(max); 
             return max;
         }
     }

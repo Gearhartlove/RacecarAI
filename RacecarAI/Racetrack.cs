@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml;
 
 namespace RacecarAI {
@@ -7,6 +8,9 @@ namespace RacecarAI {
         TrackComponent[,] racetrack;
         private Racecar racecar = new Racecar(-1, -1, 0, 0, 0, 0);
         public Racecar GetRacecar => racecar;
+
+        public List<int[]> start_spots = new List<int[]>();
+        public List<int[]> GetStartSpots => start_spots;
         
         private int x = 0; // initialize track to size 0
         private int y = 0; // initialize track to size 0
