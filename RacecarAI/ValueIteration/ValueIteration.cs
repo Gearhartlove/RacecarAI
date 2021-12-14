@@ -10,6 +10,7 @@ namespace RacecarAI {
         private double failiure = 0.2;
         private double r = -0.04;
         double gamma = 0.001; // low = lower preference for future
+        private int max_iterations = 1000;
         
         // maximum relative change int he utility of any state
         // needs to be empty like this for the deep copy created below, intentional design decision
@@ -37,8 +38,8 @@ namespace RacecarAI {
             // maximum relative change 
             int count = 0;
             while (max_change <= max_error*((1-gamma)/gamma)) {
-                Console.WriteLine(++count);
-                if (count == 5000) {
+                Console.WriteLine("Iteration: " + ++count);
+                if (count == max_iterations) {
                     return oldU;
                 }
                 oldU = newU.DeepCopy(); // TODO test implementation

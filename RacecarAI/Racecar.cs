@@ -105,5 +105,27 @@ namespace RacecarAI {
             x_pos = coords.Item1;
             y_pos = coords.Item2;
         }
+
+        /// <summary>
+        /// Move the racecar to the desired x,y coordinate
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void Drive(int x, int y) {
+            if (x_vel + x_pos < x) {
+                x_vel += 1;
+            } else if (x_vel + x_pos > x) {
+                x_vel -= 1;
+            }
+
+            if (y_vel + y_pos < y) {
+                y_vel += 1;
+            } else if (y_vel + y_pos > y) {
+                y_vel -= 1;
+            }
+            
+            x_pos = x;
+            y_pos = y;
+        }
     }
 }

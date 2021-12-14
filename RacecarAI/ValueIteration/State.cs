@@ -10,6 +10,13 @@ namespace RacecarAI {
     /// </summary>
     public class State {
 
+        /// <summary>
+        /// Empty constructor used for default state instantiation.
+        /// </summary>
+        public State() {
+            
+        }
+        
         // Constructor for State, used when creating a state object
         public State(int x, int y, TrackComponent component, int number, int sub_number, int xVel = Int32.MinValue,
             int yVel = Int32.MaxValue, double util=0) {

@@ -57,7 +57,7 @@ namespace RacecarAI {
 
         /// <summary>
         /// Assign a specific component to the Racetrack, dictated by the switch statement in the RacetrackParcer
-        /// constructor.
+        /// constructor
         /// </summary>
         /// <param name="y"></param>
         /// <param name="x"></param>
