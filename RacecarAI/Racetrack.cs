@@ -2,6 +2,7 @@
 using System.Xml;
 
 namespace RacecarAI {
+    
     public class Racetrack {
         TrackComponent[,] racetrack;
         private Racecar racecar = new Racecar(-1, -1, 0, 0, 0, 0);
@@ -13,7 +14,7 @@ namespace RacecarAI {
         public int GetTimestep => timestep;
         
         // indexer to make Racetrack API more accessible
-        public TrackComponent this[int indexY, int indexX] {
+        public TrackComponent this[int indexX, int indexY] {
             get => racetrack[indexY, indexX];
             // if the track index has not been assigned yet, then assign it to a value.
             // otherwise do not assign a value and print out a message
@@ -65,7 +66,7 @@ namespace RacecarAI {
                     if (racecar.GetXPos() == column && racecar.GetYPos() == row) {
                         o += "\u2588";
                     } else {
-                        switch (this[row, column]) {
+                        switch (this[column, row]) {
                             case TrackComponent.Track:
                                 o += ".";
                                 break;

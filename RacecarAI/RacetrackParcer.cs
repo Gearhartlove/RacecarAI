@@ -45,7 +45,7 @@ namespace RacecarAI {
         }
 
         private void AssignComponent(int y, int x, TrackComponent comp) {
-            racetrack[y, x] = comp;
+            racetrack[x, y] = comp;
         }
     }
 }

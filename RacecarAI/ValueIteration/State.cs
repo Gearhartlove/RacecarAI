@@ -10,21 +10,17 @@ namespace RacecarAI {
     /// </summary>
     public class State {
 
-        public State(int x, int y, int xVel, int yVel) {
-            x_pos = x;
-            y_pos = y;
-            x_vel = xVel;
-            y_vel = yVel;
-        }
-
-        public State(int x, int y, double util) {
+        public State(int x, int y, TrackComponent component, int number, int sub_number, int xVel = Int32.MinValue,
+            int yVel = Int32.MaxValue, double util=0) {
             x_pos = x;
             y_pos = y;
             utility = util;
-            // assigns velocity to an impossible value because the velocity is not considered for the wall 
-            // and finish states
-            x_vel = int.MaxValue;
-            y_vel = int.MaxValue;
+            x_vel = xVel;
+            y_vel = yVel;
+            this.component = component;
+
+            Position = new Tuple<int, int>(x_pos, y_pos);
+            Velocity = new Tuple<int, int>(x_vel, y_vel);
         }
         
         private int x_pos;
@@ -35,9 +31,23 @@ namespace RacecarAI {
         public int GetXVel => x_vel;
         private int y_vel;
         public int GetYVel => y_vel;
+        
+        // better debugging
+        public readonly Tuple<int, int> Position;
+        public readonly Tuple<int, int> Velocity; 
+        
+        //what type of state is this (connected to the racetrack itself)
+        private TrackComponent component;
+        public TrackComponent GetComponent => component;
+        
+        // number to refer back to the state (make the api easier)
+        private int number;
+        public int GetNumber => number;
+        private int sub_number;
+        public int GetSubNumber => sub_number;
 
         // utility initialized to zero
-        private double utility = 0;
+        private double utility;
         public double GetUtility => utility;
 
         // called when the utility needs to be updated
@@ -45,6 +55,9 @@ namespace RacecarAI {
         public void UpdateUtility(double new_util) {
             utility = new_util;
         }
+        
+        
+        
         
         
         // public static State[] ToStateArray(Racetrack racetrack) {

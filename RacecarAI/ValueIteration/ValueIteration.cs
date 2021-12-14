@@ -9,6 +9,7 @@ namespace RacecarAI {
         private double success = 0.8;
         private double failiure = 0.2;
         private double r = -0.04;
+        double gamma = 0.05; // low = lower preference for future
         
         // maximum relative change int he utility of any state
         public ValueIteration() {
@@ -29,37 +30,30 @@ namespace RacecarAI {
         /// <param name="racetrack"></param>
         public UtilityFunction RunValueIteration(Racetrack racetrack) {
             // maximum relative change in the utility of any state
-            double max_change = 0; //??
-            double gamma = 0.05; // low = lower preference for future
+            double max_change = 0; // helps determine when the progranm needs to stop running 
             double max_error = 0.1; //??
             // data structures for utilities of racetrack, initially zero
             UtilityFunction oldU = new UtilityFunction(racetrack);
             UtilityFunction newU = new UtilityFunction(racetrack);
             // maximum relative change 
-            while (max_change <= (max_error*((1-gamma)/gamma))) {
+            while (max_change <= max_error*((1-gamma)/gamma)) {
                 oldU = newU.DeepCopy(); // TODO test implementation
                 max_change = 0; // reset
                 // loop through every state
                 // update the utility of track and starting area, start from the end going forward
                 // Go through each one of the cells
-                for (int i = 0; i < oldU.GetFunction.Length; i++) {
-                    // If not a wall or a finish line, continue
-                    if (oldU.GetFunction[i].Length > 1) {
-                        // go through each of the states for each cell and perform a Bellman equation on them
-                        // TODO: Fix problem where the utility of the walls and the finish line are trying to be updated
-                        for (int j = 0; j < oldU.GetFunction[i].Length; j++) {
-                            // Don't update the walls and the finish line utility
-                            // only update the start and the track cells on the Racetrack
-                            // considered state
-                            State cs = newU.GetFunction[i][j];
-                            // Q value is returning the same value always, not updating properly
-                            if (racetrack[cs.GetYPos, cs.GetXPos] != TrackComponent.Wall || racetrack[cs.GetYPos, cs.GetXPos] != TrackComponent.Finish) {
-                                newU.GetFunction[i][j].UpdateUtility(MaxUtility(
-                                    QValue(racetrack, oldU,j,i,gamma)));
-                                if (newU.GetFunction[i][j].GetUtility - oldU.GetFunction[i][j].GetUtility >
-                                    max_change) {
-                                    max_change = newU.GetFunction[i][j].GetUtility - oldU.GetFunction[i][j].GetUtility;
-                                }
+                foreach (State[] cell_state in oldU.GetFunction) {
+                    // ignore the walls and finish line
+
+                    foreach (State sub_state in cell_state) {
+                        // Update the track and the start state of the racetrack
+                        if (sub_state.GetComponent != TrackComponent.Wall &&
+                            sub_state.GetComponent != TrackComponent.Finish) {
+                            // debugging Q function now
+                            
+                            newU[sub_state].UpdateUtility(MaxUtility(QValue(racetrack, oldU, sub_state)));
+                            if (Math.Abs(newU[sub_state].GetUtility - oldU[sub_state].GetUtility) > max_change) {
+                                max_change = Math.Abs(newU[sub_state].GetUtility - oldU[sub_state].GetUtility);
                             }
                         }
                     }
@@ -69,61 +63,44 @@ namespace RacecarAI {
         }
 
         // Returns the utility value for calculating the bellman equation
-        public List<double> QValue(Racetrack racetrack, UtilityFunction U, int x, int y, double gamma) {
+        public List<double> QValue(Racetrack racetrack, UtilityFunction U, State s) {
             List<double> utilities = new List<double>();
             // reference to the states below
             // look at each different action and make a calculation,
             // add each calculation to the utilities and return the utilities
             // TODO: kick it out to the utility function to avoid multiple memory instantiations
-            List<int[]> accel_perms = new List<int[]>();
-            int[] accel = new int[] {-1, 0, 1};
-            for (int x_a = 0; x_a < accel.Length; x_a++) {
-                for (int y_a = 0; y_a < accel.Length; y_a++) {
-                    accel_perms.Add(new int[] {accel[x_a], accel[y_a]});
-                }
-            }
-
+            List<int[]> actions = GetRacecarActions();
+        
             // go through each action or "accel_perms" 
-            foreach (int[] action in accel_perms) {
-                int next_y_vel = ClampVelocity(racetrack.GetRacecar.GetYVel() + action[1], racetrack.GetRacecar);
-                int next_x_vel = ClampVelocity(racetrack.GetRacecar.GetXVel() + action[0], racetrack.GetRacecar);
+            foreach (int[] action in actions) {
                 if (action[0] == 0 && action[1] == 0) {
                     //100% chance to do what want :)
-                    double new_util = (1 * (r + gamma * U[x, y, next_x_vel, next_y_vel].GetUtility));
+                    double new_util = 1 * (r + gamma * U.FutureStateUtility(s, xVel: action[0], yVel: action[1]));
                     utilities.Add(new_util);
                 }
                 else {
                     // 80% chance to do what I want and a 20% chance to ignore the desired action
-                    double Dcurrent_util = U[x, y, next_x_vel, next_y_vel].GetUtility;
-                    double DFuturecurrent_util = U[x, y, next_x_vel+action[0], next_y_vel].GetUtility+action[1];
-                    //Console.WriteLine("succes: " + success * (r + gamma * U[x, y, next_x_vel, next_y_vel].GetUtility));
-                    Console.WriteLine("failiure: " + failiure *
-                        (r + gamma * U[x+next_x_vel, y+next_y_vel, next_x_vel, next_y_vel].GetUtility));
-                    //double new_util = (success * (r + gamma * U[x, y, next_x_vel, next_y_vel].GetUtility)) +
-                    //                 (failiure * (r + gamma * U[x, y, next_x_vel-action[0], next_y_vel-action[1]].GetUtility));
+                    double new_util =
+                        success * (r + gamma * U.FutureStateUtility(s, xVel: action[0], yVel: action[1])) +
+                        failiure * (r + gamma * U.FutureStateUtility(s, xVel: 0, yVel: 0));
                     //Console.WriteLine("New util: " + new_util);
-                    utilities.Add(0.0);
+                    utilities.Add(new_util);
                 }
             }
-            
             return utilities;
         }
 
-        private int ClampVelocity(int value, Racecar racecar) {
-            if (value < 0) {
-                if (value > racecar.GetMAX_SPEED) {
-                    return -racecar.GetMAX_SPEED;
+        private List<int[]> GetRacecarActions() {
+            int[] accel = new int[] {-1, 0, 1};
+            List<int[]> actions = new List<int[]>();
+            for (int x_a = 0; x_a < accel.Length; x_a++) {
+                for (int y_a = 0; y_a < accel.Length; y_a++) {
+                     actions.Add(new int[] { accel[x_a], accel[y_a]});
                 }
-                return value;
             }
-            else {
-                if (value > racecar.GetMAX_SPEED) {
-                    return racecar.GetMAX_SPEED;
-                }
-                return value;
-            }
-        }
-
+            return actions;
+        } 
+        
         // TODO: implement
         public double MaxUtility(List<double> utilities) {
             double max = 0;

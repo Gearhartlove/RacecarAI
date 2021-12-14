@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace RacecarAI {
     public class UtilityFunction {
-        
+
         // utility function
         // array of state arrays 
         public int row_count = 0;
@@ -12,12 +12,21 @@ namespace RacecarAI {
         public State[][] GetFunction => function;
 
         public UtilityFunction() {
-            
+
         }
 
         // indexer to make API for accesding states simpler
         public State[] this[int i, int j] {
-            get { return function[i + j * row_count]; }
+            get {
+                if (i + j * row_count < 0 || i + j * row_count > function.Length) {
+                    return function[0]; // always return a wall
+                }
+                return function[i + j * row_count];
+            }
+        }
+
+        public State this[State s] {
+            get { return function[s.GetNumber][s.GetSubNumber]; }
         }
 
         public State this[int j, int i, int x_vel, int y_vel] {
@@ -25,7 +34,7 @@ namespace RacecarAI {
                 // TODO : i or j ?? order ??
                 if (function[i + j * row_count][0].GetUtility == 1) return function[j][i];
                 if (function[i + j * row_count][0].GetUtility == -1) return function[j][i];
-                foreach (State s in function[i + j * row_count]) { 
+                foreach (State s in function[i + j * row_count]) {
                     //Console.WriteLine(s.GetXVel + " " + s.GetYVel);
                     if (s.GetXVel == x_vel && s.GetYVel == y_vel) {
                         return s;
@@ -35,18 +44,19 @@ namespace RacecarAI {
                 throw new Exception("No matching velocity found");
             }
         }
-        
+
         public UtilityFunction(Racetrack racetrack) {
             row_count = racetrack.YTracksize;
             // Get permutations for the racetrack
             List<int[]> vel_permutations = GetPermutations(racetrack);
-            
+
             function = new State[racetrack.YTracksize * racetrack.XTracksize][];
             for (int col = 0; col < racetrack.XTracksize; col++) {
                 for (int row = 0; row < racetrack.YTracksize; row++) {
                     // for indexing the function specifically ( I don't like this but . . .) 
                     int rowf = row;
                     rowf *= racetrack.XTracksize;
+                    int number = col + (racetrack.YTracksize * row);
                     switch (racetrack[col, row]) {
                         case TrackComponent.Start:
                         case TrackComponent.Track:
@@ -54,17 +64,20 @@ namespace RacecarAI {
                             // NOTE: utility initialized to zero
                             function[col + rowf] = new State[vel_permutations.Count];
                             // assigns the desired velocity and correct position to each state
-                            SetUpState(function[col + rowf], col, row, vel_permutations);
+                            SetUpState(col, row, function[col + rowf], TrackComponent.Track,
+                                num: number, vel_permutations, 0);
                             break;
                         case TrackComponent.Wall:
                             function[col + rowf] = new State[1];
-                            SetUpState(function[col + rowf], col, row, vel_permutations, -1);
+                            SetUpState(col, row, function[col + rowf], TrackComponent.Wall,
+                                number, vel_permutations, -1);
                             break;
                         case TrackComponent.Finish:
                             function[col + rowf] = new State[1];
-                            SetUpState(function[col + rowf], col, row, vel_permutations, 1);
+                            SetUpState(col, row, function[col + rowf], TrackComponent.Finish,
+                                number, vel_permutations, 1);
                             break;
-                        
+
                     }
                 }
             }
@@ -72,15 +85,29 @@ namespace RacecarAI {
         }
 
         // Called by the Track and Start position states
-        private void SetUpState(State[] states, int x, int y, List<int[]> perms) {
+        private void SetUpState(int x, int y, State[] states, TrackComponent component, int num, List<int[]> perms,
+            double u) {
             for (int i = 0; i < states.Length; i++) {
-                states[i] = new State(x, y, perms[i][0], perms[i][1]);
+                states[i] = new State(x, y, component, num, sub_number: i, xVel: perms[i][0], yVel: perms[i][1],
+                    util: u);
             }
         }
 
-        // Called by the Wall and Finish line states
-        private void SetUpState(State[] states, int x, int y, List<int[]> perms, double util) { 
-            states[0] = new State(x, y, util);
+        // Get future state utility
+        public double FutureStateUtility(State s, int xVel, int yVel) {
+            int newXVel = 0;
+            int newYVel = 0;
+            // check if X velocity OOB
+            if (xVel + s.GetXVel <= 5 && xVel + s.GetXVel >= -5) {
+                newXVel = xVel + s.GetXVel;
+            }
+
+            // check if Y velocity OOB
+            if (yVel + s.GetYVel <= 5 && yVel + s.GetYVel >= -5) {
+                newYVel = yVel + s.GetYVel;
+            }
+
+            return function[s.GetNumber + (newXVel) + (7 * newYVel)][0].GetUtility;
         }
 
         /// <summary>
