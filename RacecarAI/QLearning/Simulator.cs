@@ -6,6 +6,17 @@ namespace RacecarAI {
 
 		private int steps = 0;
 		
+		/// <summary>
+		/// This will simulate one step on the race track. It takes a state, an action, and the track. Then it will
+		/// return what happened. With this simulator, there is a %20 chance that the action wont be taken, and the
+		/// acceleration wont be changed.
+		/// </summary>
+		/// <param name="car"></param>
+		/// <param name="track"></param>
+		/// <param name="accelDeltaX"></param>
+		/// <param name="accelDeltaY"></param>
+		/// <returns></returns>
+		/// <exception cref="Exception"></exception>
 		public Tuple<Racecar, SimulationResult> simulateStep(Racecar car, Racetrack track, int accelDeltaX, int accelDeltaY) {
 			steps++;
 			
@@ -37,6 +48,15 @@ namespace RacecarAI {
 			throw new Exception("Racetrack value should not be set to initial");
 		}
 
+		
+		/// <summary>
+		/// Overload of the function above.
+		/// </summary>
+		/// <param name="car"></param>
+		/// <param name="track"></param>
+		/// <param name="action"></param>
+		/// <returns></returns>
+		/// <exception cref="Exception"></exception>
 		public Tuple<Racecar, SimulationResult> simulateStep(Racecar car, Racetrack track, TrialAction action) {
 			switch (action) {
 				case TrialAction.ACCEL_NORTH:
@@ -62,16 +82,26 @@ namespace RacecarAI {
 			throw new Exception("Not a recognized Action.");
 		}
 
+		/// <summary>
+		/// This returns how many steps have been taken since that last reset or start of the simulators life.
+		/// </summary>
+		/// <returns></returns>
 		public int getStepsTaken() {
 			return steps;
 		}
 
+		/// <summary>
+		/// Resets the number of states taken so the simulator can start a new trial
+		/// </summary>
 		public void resetSteps() {
 			steps = 0;
 		}
 		
 	}
 
+	/// <summary>
+	/// These are the outcomes of the simulation.
+	/// </summary>
 	public enum SimulationResult {
 		CRASH,
 		CONTINUE,

@@ -11,6 +11,11 @@ namespace RacecarAI {
 		private const double discountRate = 0.1;
 		private const double T = 1.2;
 
+		/// <summary>
+		/// This method runs the Qlearning algorithm over a number of trials.
+		/// </summary>
+		/// <param name="numberOfTrials"></param>
+		/// <param name="racetrack"></param>
 		public void run(int numberOfTrials, Racetrack racetrack) {
 			int numberOfFailures = 0;
 			int numberOfSuccesses = 0;
@@ -18,7 +23,7 @@ namespace RacecarAI {
 			var state = racetrack.rollRandomStartCar();
 			
 			for (int i = 0; i < numberOfTrials; i++) {
-				Console.WriteLine("Iteration " + i + " Start!");
+				//Console.WriteLine("Iteration " + i + ":");
 				var result = runOneTrial(racetrack, state);
 
 				switch (result) {
@@ -29,42 +34,61 @@ namespace RacecarAI {
 						numberOfSuccesses++;
 						break;
 				}
-				
-				Console.WriteLine("Iteration " + i + " ended with result " + result);
-				Console.WriteLine();
+
+				//Console.WriteLine("Iteration " + i + " ended with result " + result);
+				//Console.WriteLine();
 			}
-			
+
 			Console.WriteLine("Number of Successes: " + numberOfSuccesses +" | Number of Failures: " + numberOfFailures);
 		}
 		
+		/// <summary>
+		/// This method contains the QLearning algorithm itself
+		/// </summary>
+		/// <param name="racetrack"></param>
+		/// <param name="start"></param>
+		/// <returns></returns>
 		public SimulationResult runOneTrial(Racetrack racetrack, Racecar start) {
+			
+			//First thing that I do is initialize the state and make sure my simulator is reset.
 			simulator.resetSteps();
 			var lastState = start;
 
 			Tuple<Racecar, SimulationResult> result;
 			do {
-				Console.WriteLine("  Step " + simulator.getStepsTaken());
-				Console.WriteLine("    Last State: " + "{Position: (" + lastState.GetXPos() + ", " + lastState.GetYPos() + "); Velocity:(" + lastState.GetXVel() +", " + lastState.GetYVel() + ")}");
-				
+				//Then I calculated the action im going to take given the current state.
 				var action = calculatePolicy(lastState);
-				Console.WriteLine("    Action Chosen: " + action);
+				
+				//Then, I simulate what happens when that action is taken.
 				result = simulator.simulateStep(lastState, racetrack, action);
+				
+				//Based on the return of the simulator, I make a reward.
 				var reward = calculateReward(result.Item2);
+				
+				//Then I calculate the new Qvalue for the state action pair and store it.
 				var newQValue = qTable.getValue(lastState, action) + learningRate *
 				                (reward + (discountRate * maxQValueForState(result.Item1)) - qTable.getValue(lastState, action));
-				Console.WriteLine("    New Q value for {Position: (" + lastState.GetXPos() + ", " + lastState.GetYPos() + "); Velocity:(" + lastState.GetXVel() +", " + lastState.GetYVel() + "); " + action + "}");
-				Console.WriteLine("    New Value: " + newQValue + " | Old Value: " + qTable.getValue(lastState, action));
 				qTable.setValue(lastState, action, newQValue);
+				
+				//and set the new state to the old one.
 				lastState = result.Item1;
+				
+				//And I do this until I finsih or crash
 			} while (result.Item2 == SimulationResult.CONTINUE);
 
-			//Console.WriteLine("Steps Taken: " + simulator.getStepsTaken());
-			//Console.WriteLine(racetrack.getDisplay(lastState));
-			//Console.WriteLine();
-			
+			//After everything, I return the result of this trial.
 			return result.Item2;
 		}
 		
+		/// <summary>
+		/// This function chooses the action to take next. It does this by determining the likely hood that the
+		/// specific state action pair will increase the QValue. Sometimes, however, It will pick a non-greedy
+		/// direction. It does this by putting all of the action possible into a probability table. The actions
+		/// that are considered greedy have a higher probability of being selected, however other actions can be
+		/// selected if they are lucky enough. This allows for the Qlearner to explore enough but still be effective.
+		/// </summary>
+		/// <param name="racecar"></param>
+		/// <returns></returns>
 		private TrialAction calculatePolicy(Racecar racecar) {
 			double accelNorthDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_NORTH)/T);
 			double accelNorthWestDen = Math.Pow(Math.E, qTable.getValue(racecar, TrialAction.ACCEL_NORTHWEST)/T);
@@ -88,16 +112,20 @@ namespace RacecarAI {
 
 			var roller = new ProbabilityTable<TrialAction>();
 			
-			Console.WriteLine("    Action Probabilities:");
 			foreach (TrialAction action in Enum.GetValues(typeof(TrialAction))) {
 				var actionProbability = Math.Pow(Math.E, qTable.getValue(racecar, action)/T) / denominator;
-				Console.WriteLine("      (" + action + ", " + actionProbability + ")");
 				roller.add(action, actionProbability);
 			}
 
 			return roller.roll();
 		}
 
+		/// <summary>
+		/// This function calculated the reward based on the return value of the simulator.
+		/// </summary>
+		/// <param name="result"></param>
+		/// <returns></returns>
+		/// <exception cref="Exception"></exception>
 		private double calculateReward(SimulationResult result) {
 			switch (result) {
 				case SimulationResult.CRASH:
@@ -111,6 +139,12 @@ namespace RacecarAI {
 			throw new Exception("Unexpected result.");
 		}
 
+		/// <summary>
+		/// This just finds the largest QValue for a given state by iterating over all of the possible actions and
+		/// looking up their QValues.
+		/// </summary>
+		/// <param name="racecar"></param>
+		/// <returns></returns>
 		private double maxQValueForState(Racecar racecar) {
 			var max = new ArgMax<double>();
 			
@@ -120,10 +154,11 @@ namespace RacecarAI {
 
 			return max.Greatest;
 		}
-		
-		//private Tuple<int, int> getValueFromAction()
 	}
 
+	/// <summary>
+	/// This is a QTable is a action pair lookup that defaults a return value of 0 if there is no value set.
+	/// </summary>
 	public class QTable {
 		private Dictionary<StateActionPair, double> table = new Dictionary<StateActionPair, double>();
 
@@ -145,6 +180,9 @@ namespace RacecarAI {
 		}
 	}
 	
+	/// <summary>
+	/// This enum defines what actions can be taken.
+	/// </summary>
 	public enum TrialAction {
 		ACCEL_NORTH,
 		ACCEL_NORTHEAST,
@@ -157,6 +195,10 @@ namespace RacecarAI {
 		NO_ACCEL
 	}
 
+	/// <summary>
+	/// This class defines a State Pair action. It stores the state value pair, it also implements method for
+	/// equality and hashing, so it can be used as a key in a hash table.
+	/// </summary>
 	public class StateActionPair {
 		private Racecar state;
 		private TrialAction action;
