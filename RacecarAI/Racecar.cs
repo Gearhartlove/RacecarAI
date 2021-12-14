@@ -5,6 +5,7 @@ namespace RacecarAI {
     public class Racecar {
 
         private const int MAX_SPEED = 5;
+        public int GetMAX_SPEED => MAX_SPEED;
         private const int MAX_ACCEL = 1;
         
         // Read-Only Stats
@@ -30,6 +31,13 @@ namespace RacecarAI {
             x_accel = Util.Clamp(accelX, -MAX_ACCEL, MAX_ACCEL);
             y_accel = Util.Clamp(accelY, -MAX_ACCEL, MAX_ACCEL);
         }
+        
+        // actions for the Racecar to make
+        public enum Actions {
+            Nothing,
+            Accelerate,
+            Decelerate,
+        }
 
         public override string ToString() {
             string o = "";
@@ -48,6 +56,12 @@ namespace RacecarAI {
             return !racecar1.Equals(racecar2);
         }
         
+
+        public int Clamp(int value, int min, int max) {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
+
         public override bool Equals(object obj) {
             if (obj is Racecar) {
                 var other = (Racecar) obj;
@@ -69,6 +83,11 @@ namespace RacecarAI {
                    y_vel.GetHashCode() ^
                    x_accel.GetHashCode() ^
                    y_accel.GetHashCode();
+        }
+
+        public void Spawn(Tuple<int, int> coords) {
+            x_pos = coords.Item1;
+            y_pos = coords.Item2;
         }
 
         // private int vel_x = 0;

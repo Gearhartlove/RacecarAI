@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using System.Xml;
 
 namespace RacecarAI {
+    
     public class Racetrack {
         TrackComponent[,] racetrack;
+        private Racecar racecar = new Racecar(-1, -1, 0, 0, 0, 0);
+        public Racecar GetRacecar => racecar;
+
+        public List<int[]> start_spots = new List<int[]>();
+        public List<int[]> GetStartSpots => start_spots;
         
         private ProbabilityTable<Tuple<int, int>> startPositions = new ProbabilityTable<Tuple<int, int>>();
         
@@ -14,8 +20,15 @@ namespace RacecarAI {
         public int GetTimestep => timestep;
         
         // indexer to make Racetrack API more accessible
-        public TrackComponent this[int indexY, int indexX] {
+        //ValueIterationBranch
+        //public TrackComponent this[int indexX, int indexY] {
+            //get => racetrack[indexY, indexX];
+
+  
+        //TODO: Fis this issue :)
+        public TrackComponent this[int indexY, int indexX, debug] {
             get => racetrack[Util.Clamp(indexY, 0, y-1), Util.Clamp(indexX, 0, x-1)];
+          
             // if the track index has not been assigned yet, then assign it to a value.
             // otherwise do not assign a value and print out a message
             set {
@@ -79,7 +92,7 @@ namespace RacecarAI {
                     if (racecar.GetXPos() == column && racecar.GetYPos() == row) {
                         o += "\u2588";
                     } else {
-                        switch (this[row, column]) {
+                        switch (this[column, row]) {
                             case TrackComponent.Track:
                                 o += ".";
                                 break;

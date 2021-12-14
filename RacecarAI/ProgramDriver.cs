@@ -13,7 +13,10 @@ namespace RacecarAI {
             Console.WriteLine(debug_track);
             
             // run algorithms
-            vi.Run(debug_track);
+            UtilityFunction uf = vi.RunValueIteration(debug_track);
+            Policy optimal_policy = new Policy(uf, debug_track);
+            optimal_policy.Run();
+
         }
         
         public void RunProgram() {
@@ -26,9 +29,10 @@ namespace RacecarAI {
             Racetrack o_track = parcer.Parse("O-Track"); 
             
             // run algorithms
-            vi.Run(l_track);
-            vi.Run(r_track);
-            vi.Run(o_track);
+
+            vi.RunValueIteration(l_track);
+            vi.RunValueIteration(r_track);
+            vi.RunValueIteration(o_track);
             
             // printint out track with car test
             Console.WriteLine(l_track);
