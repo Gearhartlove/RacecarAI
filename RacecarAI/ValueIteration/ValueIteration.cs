@@ -8,7 +8,7 @@ namespace RacecarAI {
     public class ValueIteration {
         private double success = 0.8;
         private double failiure = 0.2;
-        private double r = -0.04;
+        private double r = -0.07;
         double gamma = 0.05; // low = lower preference for future
         
         // maximum relative change int he utility of any state
@@ -50,10 +50,15 @@ namespace RacecarAI {
                         if (sub_state.GetComponent != TrackComponent.Wall &&
                             sub_state.GetComponent != TrackComponent.Finish) {
                             // debugging Q function now
-                            
-                            newU[sub_state].UpdateUtility(MaxUtility(QValue(racetrack, oldU, sub_state)));
+                            Console.WriteLine("New Utility: " + newU[sub_state].GetUtility);
+                            Console.WriteLine("Old Utility: " + oldU[sub_state].GetUtility);
+                            newU[sub_state].GetUtility = (MaxUtility(QValue(racetrack, oldU, sub_state)));
+                            Console.WriteLine("New Utility: " + newU[sub_state].GetUtility);
+                            Console.WriteLine("Old Utility: " + oldU[sub_state].GetUtility);
+                            //Console.WriteLine(Math.Abs(newU[sub_state].GetUtility - oldU[sub_state].GetUtility));
                             if (Math.Abs(newU[sub_state].GetUtility - oldU[sub_state].GetUtility) > max_change) {
                                 max_change = Math.Abs(newU[sub_state].GetUtility - oldU[sub_state].GetUtility);
+                                Console.WriteLine("max_change is now " + max_change);
                             }
                         }
                     }
@@ -103,12 +108,13 @@ namespace RacecarAI {
         
         // TODO: implement
         public double MaxUtility(List<double> utilities) {
-            double max = 0;
+            double max = -1000;
             for (int i = 0; i < utilities.Count; i++) {
                 if (utilities[i] >= max) {
                     max = utilities[i];
                 }
             }
+            Console.WriteLine(max); 
             return max;
         }
     }

@@ -1,18 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace RacecarAI {
     public class UtilityFunction {
 
-        // utility function
-        // array of state arrays 
         public int row_count = 0;
         private State[][] function;
         public State[][] GetFunction => function;
 
         public UtilityFunction() {
-
+            
         }
 
         // indexer to make API for accesding states simpler
@@ -27,22 +26,6 @@ namespace RacecarAI {
 
         public State this[State s] {
             get { return function[s.GetNumber][s.GetSubNumber]; }
-        }
-
-        public State this[int j, int i, int x_vel, int y_vel] {
-            get {
-                // TODO : i or j ?? order ??
-                if (function[i + j * row_count][0].GetUtility == 1) return function[j][i];
-                if (function[i + j * row_count][0].GetUtility == -1) return function[j][i];
-                foreach (State s in function[i + j * row_count]) {
-                    //Console.WriteLine(s.GetXVel + " " + s.GetYVel);
-                    if (s.GetXVel == x_vel && s.GetYVel == y_vel) {
-                        return s;
-                    }
-                }
-
-                throw new Exception("No matching velocity found");
-            }
         }
 
         public UtilityFunction(Racetrack racetrack) {
@@ -81,7 +64,6 @@ namespace RacecarAI {
                     }
                 }
             }
-            // assign the states velocity values 
         }
 
         // Called by the Track and Start position states
@@ -107,7 +89,14 @@ namespace RacecarAI {
                 newYVel = yVel + s.GetYVel;
             }
 
-            return function[s.GetNumber + (newXVel) + (7 * newYVel)][0].GetUtility;
+            if (s.GetNumber + newXVel + row_count * newYVel >= 0 && 
+                s.GetNumber + newXVel + row_count * newYVel < function.Length) {
+                int debug_num = s.GetNumber + (newXVel) + (row_count * newYVel);
+                return function[s.GetNumber + (newXVel) + (row_count * newYVel)][0].GetUtility;
+            }
+
+            // if OOB consider it to be a wall
+            else return -1;
         }
 
         /// <summary>
@@ -123,7 +112,7 @@ namespace RacecarAI {
             for (int i = -range; i < range + 1; i++) {
                 for (int j = -range; j < range + 1; j++) {
                     int[] combination = new[] {i, j};
-                    // Console.WriteLine(i + " " + j);
+                    //Console.WriteLine(i + " " + j);
                     permutations.Add(combination);
                 }
             }
@@ -139,7 +128,23 @@ namespace RacecarAI {
             if (function == null) {
                 throw new Exception("Can't deep copy a null utility function!");
             }
-            return new UtilityFunction() {function = this.function };
+
+            UtilityFunction other = new UtilityFunction();
+
+            other.function = new State[function.Length][];
+            
+            for (int i = 0; i < other.function.Length; i++) {
+                other.function[i] = new State[this.function[i].Length];
+                for (int j = 0; j < other.function[i].Length; j++) {
+                    
+                    other.function[i][j] = new State(function[i][j].GetXPos, function[i][j].GetYPos,
+                        function[i][j].GetComponent, function[i][j].GetNumber,
+                        function[i][j].GetSubNumber, function[i][j].GetXVel, function[i][j].GetYVel,
+                        function[i][j].GetUtility);
+                }
+            }
+            other.row_count = row_count;
+            return other;
         }
     }
 }

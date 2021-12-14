@@ -19,6 +19,9 @@ namespace RacecarAI {
             y_vel = yVel;
             this.component = component;
 
+            this.number = number;
+            this.sub_number = sub_number;
+
             Position = new Tuple<int, int>(x_pos, y_pos);
             Velocity = new Tuple<int, int>(x_vel, y_vel);
         }
@@ -48,15 +51,11 @@ namespace RacecarAI {
 
         // utility initialized to zero
         private double utility;
-        public double GetUtility => utility;
-
-        // called when the utility needs to be updated
-        // aka every sweep 
-        public void UpdateUtility(double new_util) {
-            utility = new_util;
+        public double GetUtility {
+            get => utility;
+            set => utility = value;
         }
-        
-        
+
         
         
         
