@@ -12,6 +12,7 @@ namespace RacecarAI {
         double gamma = 0.001; // low = lower preference for future
         
         // maximum relative change int he utility of any state
+        // needs to be empty like this for the deep copy created below, intentional design decision
         public ValueIteration() {
             
         }
@@ -24,8 +25,6 @@ namespace RacecarAI {
         /// at those positions (x',y'). The Actions "A" are the change in acceleration of the Racecar (x'',y'').
         /// And the Transition Model is there is 80% for intended action, 20% for non-intended action. The rewards
         /// function follows these rules : TRACK=0, WALL=-1, FINISH_LINE=1, START_LINE=0;
-        /// ??? maximum error allowed in the utility of any state
-        /// 
         /// </summary>
         /// <param name="racetrack"></param>
         public UtilityFunction RunValueIteration(Racetrack racetrack) {
@@ -75,7 +74,6 @@ namespace RacecarAI {
             // reference to the states below
             // look at each different action and make a calculation,
             // add each calculation to the utilities and return the utilities
-            // TODO: kick it out to the utility function to avoid multiple memory instantiations
             List<int[]> actions = GetRacecarActions();
         
             // go through each action or "accel_perms" 
@@ -108,7 +106,6 @@ namespace RacecarAI {
             return actions;
         } 
         
-        // TODO: implement
         public double MaxUtility(List<double> utilities) {
             double max = -1000;
             for (int i = 0; i < utilities.Count; i++) {

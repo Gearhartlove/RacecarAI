@@ -20,7 +20,7 @@ namespace RacecarAI {
 			var newPosX = Util.Clamp(car.GetXPos() + newSpeedX, 0, track.XTracksize-1);
 			var newPosY = Util.Clamp(car.GetYPos() + newSpeedY, 0 , track.YTracksize-1);
 			
-			var nextLocation = track[newPosY, newPosX];
+			var nextLocation = track[newPosX, newPosY];
 
 			var newRacecar = new Racecar(newPosX, newPosY, newSpeedX, newSpeedY, newAccelX, newAccelY);
 			

@@ -59,13 +59,10 @@
         <Compile Include="RacetrackParcer.cs" />
         <Compile Include="Tests\RacecarTests.cs" />
         <Compile Include="Tests\RacetrackTests.cs" />
-
-        <Compile Include="ValueIteration\Action.cs" />
         <Compile Include="ValueIteration\State.cs" />
         <Compile Include="ValueIteration\UtilityFunction.cs" />
         <Compile Include="ValueIteration\ValueIteration.cs" />
         <Compile Include="Util.cs" />
-        <Compile Include="ValueIteration.cs" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Racetracks\Debug-Track.txt" />

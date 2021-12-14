@@ -19,14 +19,7 @@ namespace RacecarAI {
         private int timestep = 0;
         public int GetTimestep => timestep;
         
-        // indexer to make Racetrack API more accessible
-        //ValueIterationBranch
-        //public TrackComponent this[int indexX, int indexY] {
-            //get => racetrack[indexY, indexX];
-
-  
-        //TODO: Fis this issue :)
-        public TrackComponent this[int indexY, int indexX, debug] {
+        public TrackComponent this[int indexX, int indexY] {
             get => racetrack[Util.Clamp(indexY, 0, y-1), Util.Clamp(indexX, 0, x-1)];
           
             // if the track index has not been assigned yet, then assign it to a value.

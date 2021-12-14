@@ -10,7 +10,7 @@ namespace RacecarAI {
             
             // track instantiation
             Racetrack debug_track = parcer.Parse("Debug-Track");
-            Console.WriteLine(debug_track);
+            //Console.WriteLine(debug_track);
             
             // run algorithms
             UtilityFunction uf = vi.RunValueIteration(debug_track);

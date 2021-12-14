@@ -55,12 +55,13 @@ namespace RacecarAI {
         public static bool operator !=(Racecar racecar1, Racecar racecar2) {
             return !racecar1.Equals(racecar2);
         }
-        
+
 
         public int Clamp(int value, int min, int max) {
             if (value < min) return min;
             if (value > max) return max;
             return value;
+        }
 
         public override bool Equals(object obj) {
             if (obj is Racecar) {
@@ -89,63 +90,5 @@ namespace RacecarAI {
             x_pos = coords.Item1;
             y_pos = coords.Item2;
         }
-
-        // private int vel_x = 0;
-         //
-         // public void SetXVelocity(int value) {
-         //     if (IsValidVelocity(value)) {
-         //        vel_x = value;
-         //     }
-         //    
-         //     throw new Exception("Cannot change velocity to: " + value);
-         // }
-         //
-         // public void SetYVelocity(int value) {
-         //     if (IsValidVelocity(value)) {
-         //        vel_y = value;
-         //     }
-         //
-         //     throw new Exception("Cannot change velocity to: " + value);
-         // }
-
-         // private bool IsValidVelocity(int value) {
-         //     if (value > max_velocity || value < min_velocity) {
-         //         return false;
-         //     }
-         //     return true;
-         // }
-         //
-         // public int Velocity_X {
-         //     get {
-         //         return vel_x;
-         //     }
-         //     set {
-         //         int accel = value;
-         //         // prevent the car from accelerating more or less than + or - 1 unity per time step
-         //         if (accel > max_acceleration || accel < min_acceleration) {
-         //             throw new Exception("Can't accelerate the car at speed " +accel);
-         //         }
-         //         // can't have a velocity greater than + 5 or less than - 5
-         //         if (vel_x + accel > max_velocity || vel_x - accel < min_velocity) {
-         //             vel_x += 0; // don't do anything > Q: is there another way to do this? 
-         //         } else {
-         //             vel_x += accel;
-         //         }
-         //     }
-         // }
-        // public int GetXVelocity => vel_x;
-         //private int vel_y = 0;
-        // public int GetYVelocity => vel_y;
-        // // acceleration
-        // private int accel_x = 0;
-        // public int GetXAccel => accel_x;
-        // private int accel_y = 0;
-        // public int GetYAccel => accel_y;
-        // // position
-        // private int x_pos = -1;
-        // public int GetXPos => x_pos; 
-        // private int y_pos = -1;
-        // public int GetYPos => y_pos; 
-        
     }
 }

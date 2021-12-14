@@ -55,20 +55,5 @@ namespace RacecarAI {
             get => utility;
             set => utility = value;
         }
-
-        
-        
-        
-        // public static State[] ToStateArray(Racetrack racetrack) {
-        //     int range = racetrack.GetRacecar.GetMAX_SPEED;
-        //     List<int[]> permutations = GetPermutations(racetrack, range);
-        //     // loop through the board state and assign values for the track 
-        //     
-        //
-        //     return new State[]{new State()};
-        // }
-
-        
-        
     }
 }
