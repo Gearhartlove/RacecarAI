@@ -20,7 +20,12 @@ namespace RacecarAI.Tests {
                 // cannot assign a velocity to something
                 
             }
-           // Test 
+
+            [TestMethod]
+            public void equality() {
+                Assert.AreEqual(racecar, new Racecar(0, 0, 0, 0, 0, 0));
+            }
+            // Test 
            //  [TestMethod]
            //  public void Valid_Acceleration() {
            //      

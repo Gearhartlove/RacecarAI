@@ -12,22 +12,31 @@ namespace RacecarAI {
         public List<int[]> start_spots = new List<int[]>();
         public List<int[]> GetStartSpots => start_spots;
         
+        private ProbabilityTable<Tuple<int, int>> startPositions = new ProbabilityTable<Tuple<int, int>>();
+        
         private int x = 0; // initialize track to size 0
         private int y = 0; // initialize track to size 0
         private int timestep = 0;
         public int GetTimestep => timestep;
         
         // indexer to make Racetrack API more accessible
-        public TrackComponent this[int indexX, int indexY] {
-            get => racetrack[indexY, indexX];
+        //ValueIterationBranch
+        //public TrackComponent this[int indexX, int indexY] {
+            //get => racetrack[indexY, indexX];
+
+  
+        //TODO: Fis this issue :)
+        public TrackComponent this[int indexY, int indexX, debug] {
+            get => racetrack[Util.Clamp(indexY, 0, y-1), Util.Clamp(indexX, 0, x-1)];
+          
             // if the track index has not been assigned yet, then assign it to a value.
             // otherwise do not assign a value and print out a message
             set {
                 if (racetrack[indexY, indexX] == TrackComponent.Initial) racetrack[indexY, indexX] = value;
                 else Console.WriteLine("Cannot assign a track value twice");
-            } 
+            }
         }
-        
+
         // Get the number of columns for the track
         public int XTracksize {
             get => x;
@@ -60,6 +69,19 @@ namespace RacecarAI {
                 racetrack = new TrackComponent[y, x];
             }
             else Console.WriteLine("Size is already assigned, cannot reassign");
+        }
+
+        public void addStartPos(int x, int y) {
+            startPositions.add(new Tuple<int, int>(x, y), 1);
+        }
+
+        public Tuple<int, int>[] getStartPosistions() {
+            return startPositions.Data;
+        }
+
+        public Racecar rollRandomStartCar() {
+            var start = startPositions.roll();
+            return new Racecar(start.Item1, start.Item2, 0, 0, 0, 0);
         }
 
         public string getDisplay(Racecar racecar) {

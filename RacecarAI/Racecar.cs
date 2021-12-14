@@ -13,8 +13,8 @@ namespace RacecarAI {
         private int y_vel = 0;
         private int x_accel = 0;
         private int y_accel = 0;
-        private int x_pos = -1;
-        private int y_pos = -1;
+        private int x_pos = 0;
+        private int y_pos = 0;
 
         public int GetXVel() => x_vel;
         public int GetYVel() => y_vel;
@@ -26,10 +26,10 @@ namespace RacecarAI {
         public Racecar(int posX, int posY, int velX, int velY, int accelX, int accelY) {
             x_pos = posX;
             y_pos = posY;
-            x_vel = Clamp(velX, -MAX_SPEED, MAX_SPEED);
-            y_vel = Clamp(velY, -MAX_SPEED, MAX_SPEED);
-            x_accel = Clamp(accelX, -MAX_ACCEL, MAX_ACCEL);
-            y_accel = Clamp(accelY, -MAX_ACCEL, MAX_ACCEL);
+            x_vel = Util.Clamp(velX, -MAX_SPEED, MAX_SPEED);
+            y_vel = Util.Clamp(velY, -MAX_SPEED, MAX_SPEED);
+            x_accel = Util.Clamp(accelX, -MAX_ACCEL, MAX_ACCEL);
+            y_accel = Util.Clamp(accelY, -MAX_ACCEL, MAX_ACCEL);
         }
         
         // actions for the Racecar to make
@@ -47,11 +47,42 @@ namespace RacecarAI {
             o += "Acceleration:   " + x_accel + " " + y_accel + "\n";
             return o;
         }
+
+        public static bool operator ==(Racecar racecar1, Racecar racecar2) {
+            return racecar1.Equals(racecar2);
+        }
         
+        public static bool operator !=(Racecar racecar1, Racecar racecar2) {
+            return !racecar1.Equals(racecar2);
+        }
+        
+
         public int Clamp(int value, int min, int max) {
             if (value < min) return min;
             if (value > max) return max;
             return value;
+
+        public override bool Equals(object obj) {
+            if (obj is Racecar) {
+                var other = (Racecar) obj;
+                return x_pos == other.GetXPos() &&
+                       y_pos == other.GetYPos() &&
+                       x_vel == other.GetXVel() &&
+                       y_vel == other.GetYVel() &&
+                       x_accel == other.GetXAccel() &&
+                       y_accel == other.GetYAccel();
+            }
+            
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode() {
+            return x_pos.GetHashCode() ^
+                   y_pos.GetHashCode() ^
+                   x_vel.GetHashCode() ^
+                   y_vel.GetHashCode() ^
+                   x_accel.GetHashCode() ^
+                   y_accel.GetHashCode();
         }
 
         public void Spawn(Tuple<int, int> coords) {

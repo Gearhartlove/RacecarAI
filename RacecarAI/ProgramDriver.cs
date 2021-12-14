@@ -7,7 +7,6 @@ namespace RacecarAI {
         public void DebugRunProgram() {
             RacetrackParcer parcer = new RacetrackParcer();
             ValueIteration vi = new ValueIteration();
-            Sarsa sarsa = new Sarsa();
             
             // track instantiation
             Racetrack debug_track = parcer.Parse("Debug-Track");
@@ -17,25 +16,23 @@ namespace RacecarAI {
             UtilityFunction uf = vi.RunValueIteration(debug_track);
             Policy optimal_policy = new Policy(uf, debug_track);
             optimal_policy.Run();
+
         }
         
         public void RunProgram() {
             RacetrackParcer parcer = new RacetrackParcer();
             ValueIteration vi = new ValueIteration();
-            Sarsa sarsa = new Sarsa();
-            
+
             // track instantiation
             Racetrack l_track = parcer.Parse("L-Track");
             Racetrack r_track = parcer.Parse("R-Track");
             Racetrack o_track = parcer.Parse("O-Track"); 
             
             // run algorithms
+
             vi.RunValueIteration(l_track);
             vi.RunValueIteration(r_track);
             vi.RunValueIteration(o_track);
-            sarsa.Run(l_track);
-            sarsa.Run(r_track);
-            sarsa.Run(o_track);
             
             // printint out track with car test
             Console.WriteLine(l_track);

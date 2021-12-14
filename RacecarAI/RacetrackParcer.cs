@@ -38,6 +38,7 @@ namespace RacecarAI {
                         case 'S':
                             AssignComponent(line, character, TrackComponent.Start); 
                             AddToStartSpot(line, character); 
+                            racetrack.addStartPos(character, line);
                             break;
                     }
                 }
